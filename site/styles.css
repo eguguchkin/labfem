@@ -1,0 +1,424 @@
+/* Лаборатория феминности — «раскрытая книга, найденная в саду» */
+
+:root {
+  --paper:      #F5F0E8;  /* молочная бумага */
+  --paper-lite: #F7F2EB;
+  --cream:      #F0E9DC;  /* кремовая страница */
+  --parchment:  #FAF6EE;
+  --rose:       #F5EEE9;  /* молочная + розовый подтон 4% */
+  --lavender:   #F1EBE3;  /* кремовая + лавандовый подтон 3% */
+  --ink:        #3A3230;  /* тёплый графит */
+  --ink-deep:   #2C2523;
+  --sepia:      #6B5B4E;
+  --dust:       #C9A9A0;  /* пыльно-розовый */
+  --dust-dark:  #B08D84;
+  --lav:        #B8A9C9;
+  --sage:       #8B9478;
+  --ochre:      #C4A265;
+  --terra:      #B07D6A;
+  --line:       #E5DDD0;  /* тень страницы */
+
+  --head: "Cormorant Garamond", Georgia, serif;
+  --text: "EB Garamond", Georgia, serif;
+  --hand: "Caveat", cursive;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 19px/1.7 var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* зерно бумаги поверх всего, едва заметно */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+  opacity: .05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+img { max-width: 100%; height: auto; }
+
+.col {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+}
+
+/* ── оглавление ─────────────────────────────────────── */
+.toc {
+  padding: 18px 24px 14px;
+}
+.toc nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 22px;
+  font-size: 14px;
+  letter-spacing: .06em;
+  color: rgba(58, 50, 48, .62);
+}
+.toc-word { font-style: italic; }
+.toc a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .3s ease, border-color .3s ease;
+}
+.toc a:hover { color: var(--ink); border-color: var(--dust); }
+
+.burger { display: none; }
+
+/* ── секции-развороты ───────────────────────────────── */
+section { padding: 130px 0 110px; }
+
+.s1 { background: linear-gradient(180deg, var(--paper) 0, var(--paper-lite) 220px); }
+.s2 { background: linear-gradient(180deg, var(--paper-lite) 0, var(--rose) 220px); }
+.s3 { background: linear-gradient(180deg, var(--rose) 0, var(--cream) 220px); }
+.s4 { background: linear-gradient(180deg, var(--cream) 0, var(--paper) 220px); }
+.s5 { background: linear-gradient(180deg, var(--paper) 0, var(--lavender) 220px); }
+.s6 { background: linear-gradient(180deg, var(--lavender) 0, var(--paper) 220px); }
+.s7 { background: linear-gradient(180deg, var(--paper) 0, var(--cream) 220px); }
+.s8 { background: linear-gradient(180deg, var(--cream) 0, var(--paper-lite) 220px); }
+
+.chapter {
+  margin: 0 0 10px;
+  font: italic 400 15px/1.5 var(--text);
+  letter-spacing: .08em;
+  color: var(--sepia);
+  opacity: .75;
+}
+
+h1, h2, h3 { font-family: var(--head); font-weight: 400; color: var(--ink-deep); }
+
+h1 {
+  margin: 34px 0 18px;
+  font-size: clamp(44px, 7vw, 62px);
+  line-height: 1.15;
+  text-align: center;
+}
+h2 { margin: 0 0 36px; font-size: clamp(32px, 5vw, 40px); line-height: 1.25; }
+h3 { margin: 0 0 10px; font-size: 24px; line-height: 1.3; }
+
+.subtitle {
+  margin: 0;
+  text-align: center;
+  font: italic 400 21px/1.5 var(--head);
+  color: var(--sepia);
+}
+.folio {
+  margin: 46px 0 0;
+  text-align: center;
+  font: italic 400 14px/1.5 var(--text);
+  letter-spacing: .12em;
+  color: rgba(58, 50, 48, .5);
+}
+
+.title-block { text-align: center; }
+.title-block .art { margin: 0 auto; }
+
+/* ── проза ──────────────────────────────────────────── */
+.prose p {
+  margin: 0;
+  text-indent: 1.8em;
+}
+.prose p + p { margin-top: .35em; }
+
+.lead { font-size: 21px; font-style: italic; color: var(--sepia); }
+
+.dropcap::first-letter {
+  float: left;
+  margin: 6px 12px 0 0;
+  font: 400 3.6em/0.85 var(--head);
+  color: var(--ochre);
+}
+
+/* пометка на полях */
+.marginal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 40px 0 0 -34px;
+  max-width: 210px;
+  transform: rotate(-2deg);
+}
+.marginal span { font: 400 19px/1.35 var(--hand); color: var(--sepia); }
+
+.hand {
+  display: block;
+  margin-top: 14px;
+  font: 400 19px/1.35 var(--hand);
+  color: var(--sepia);
+  transform: rotate(-1.2deg);
+}
+
+/* ── иллюстрации ────────────────────────────────────── */
+.art { display: block; margin: 56px auto 0; }
+.art.wide { margin-top: 64px; }
+.art.small { margin: 48px auto 0; }
+
+.divider {
+  display: block;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+.dv-rose  { background: var(--rose); }
+.dv-paper { background: var(--paper); }
+.dv-cream { background: var(--cream); }
+
+/* ── оптика: четыре линзы ───────────────────────────── */
+.lenses {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px 34px;
+  margin-top: 70px;
+}
+.lens { text-align: center; }
+.lens h3 { font-size: 23px; margin-top: 16px; }
+.lens p { margin: 0; font-size: 17px; color: rgba(58, 50, 48, .85); }
+
+/* ── зарисовки «для кого» ───────────────────────────── */
+.sketches { margin-top: 20px; }
+.sketch {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 40px;
+  align-items: center;
+  margin: 72px 0 0;
+}
+.sketch.flip { grid-template-columns: 1fr 220px; }
+.sketch.flip img { order: 2; }
+.sketch figcaption {
+  margin: 0;
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+/* ── портреты ───────────────────────────────────────── */
+.portraits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-top: 20px;
+}
+.portrait img {
+  display: block;
+  padding: 10px;
+  border: 1px solid var(--line);
+  background: var(--parchment);
+}
+.portrait p { margin: 0 0 .6em; font-size: 18px; }
+
+/* ── встречи ────────────────────────────────────────── */
+.meetings { margin-top: 56px; }
+.meeting {
+  padding: 26px 0 26px 22px;
+  border-top: 1px solid var(--line);
+}
+.meeting .date {
+  margin: 0 0 6px;
+  font-size: 15px;
+  letter-spacing: .1em;
+  color: var(--terra);
+}
+.meeting h3 { font-size: 23px; margin: 0 0 6px; }
+.meeting p:last-child { margin: 0; font-size: 17px; color: rgba(58, 50, 48, .85); }
+
+.meeting.past { opacity: .62; }
+.meeting.next { border-left: 2px solid var(--dust); }
+.meeting.future {
+  border: 1px dashed var(--line);
+  border-top: 1px dashed var(--line);
+  opacity: .58;
+  font-style: italic;
+  margin-top: 18px;
+  padding-left: 22px;
+}
+
+/* ── процесс и карточки ─────────────────────────────── */
+.process {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 44px;
+  margin: 64px 0 0;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+  margin-top: 84px;
+}
+.card {
+  padding: 30px 26px 26px;
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  transition: background-color .3s ease;
+}
+.card:hover { background: #F6F1E7; }
+.card h3 { font-size: 23px; }
+.card p { margin: 0 0 16px; font-size: 17px; color: rgba(58, 50, 48, .85); }
+
+.invite {
+  font: italic 400 17px/1.4 var(--text);
+  color: var(--dust);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .3s ease, border-color .3s ease;
+}
+.invite:hover { color: var(--dust-dark); border-color: var(--dust-dark); }
+
+/* ── приглашение ────────────────────────────────────── */
+#ryadom { text-align: center; }
+.invite-lead {
+  max-width: 480px;
+  margin: 26px auto 0;
+  font: italic 400 21px/1.6 var(--head);
+  color: var(--sepia);
+}
+
+.guestbook {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 44px auto 0;
+}
+.guestbook input {
+  width: 280px;
+  padding: 12px 16px;
+  font: italic 400 17px/1.4 var(--text);
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--dust);
+  border-radius: 3px;
+  outline: none;
+  transition: border-color .3s ease, background-color .3s ease;
+}
+.guestbook input::placeholder { color: rgba(107, 91, 78, .55); }
+.guestbook input:focus { border-color: var(--dust-dark); background: var(--parchment); }
+.guestbook button {
+  padding: 12px 28px;
+  font: 400 17px/1.4 var(--text);
+  color: var(--ink);
+  background: var(--cream);
+  border: 1px solid var(--ochre);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color .3s ease;
+}
+.guestbook button:hover { background: #E8E0D2; }
+.form-note { margin: 18px 0 0; font: 400 19px/1.4 var(--hand); color: var(--sepia); }
+
+.legal {
+  margin: 20px 0 0;
+  font: italic 400 13px/1.5 var(--text);
+  color: rgba(58, 50, 48, .5);
+}
+
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  margin: 40px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.socials a { color: rgba(58, 50, 48, .5); transition: color .3s ease; }
+.socials a:hover { color: var(--ink); }
+
+.closing {
+  margin: 64px 0 0;
+  font: 400 26px/1.4 var(--head);
+  color: var(--ink-deep);
+}
+
+/* ── подвал ─────────────────────────────────────────── */
+footer {
+  padding: 60px 24px 70px;
+  text-align: center;
+  background: var(--paper-lite);
+}
+footer p {
+  margin: 14px 0 0;
+  font: italic 400 14px/1.5 var(--text);
+  letter-spacing: .08em;
+  color: rgba(58, 50, 48, .55);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── проявление при скролле ─────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .9s ease-out, transform .9s ease-out;
+}
+.reveal.in { opacity: 1; transform: none; }
+img.reveal { transition-duration: 1.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ── адаптивность ───────────────────────────────────── */
+@media (max-width: 1023px) {
+  .lenses { grid-template-columns: repeat(2, 1fr); }
+  .marginal { margin-left: 0; }
+}
+
+@media (max-width: 767px) {
+  body { font-size: 17px; }
+  section { padding: 84px 0 72px; }
+  .toc nav { display: none; flex-direction: column; align-items: center; gap: 10px; padding-top: 10px; }
+  .toc.open nav { display: flex; }
+  .burger {
+    display: block;
+    margin: 0 auto;
+    padding: 6px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  .burger span {
+    display: block;
+    width: 26px;
+    height: 1px;
+    margin: 5px 0;
+    background: var(--ink);
+    opacity: .6;
+  }
+  .sketch, .sketch.flip { grid-template-columns: 1fr; gap: 22px; text-align: center; }
+  .sketch.flip img { order: 0; }
+  .sketch img { margin: 0 auto; }
+  .portraits { grid-template-columns: 1fr; gap: 56px; }
+  .portrait img { margin: 0 auto; }
+  .process { flex-direction: column; align-items: center; gap: 36px; }
+  .cards { grid-template-columns: 1fr; gap: 28px; }
+  .guestbook { flex-direction: column; align-items: center; }
+  .guestbook input { width: 100%; max-width: 320px; }
+  .marginal { transform: none; }
+}
