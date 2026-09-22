@@ -363,13 +363,13 @@ pure white #FFFFFF, pure black #000000, neon colors, oversaturated colors, gloss
 
 ---
 
-## F4. Фигура в шали, сидящая спиной
+## F4. Свернувшаяся в кресле figura в шали
 
-**Формат:** 1024×1280, прозрачный PNG.
+**Формат:** 1024×1536, прозрачный PNG.
 
 **Prompt:**
 
-> A seated female figure seen from behind, wrapped in a soft shawl, head slightly lowered, simple wooden chair, quiet introspection, age ambiguous, no facial features, antique engraving, fine slightly uneven etched line, delicate hatching, warm graphite #3A3230 and sepia #6B5B4E, faint translucent lavender watercolor wash #B8A9C9 at 15 percent, isolated on transparent background, vertical composition, no frame, no text, no dramatic shadows, no bright colors.
+> A young woman curled up sideways in a deep old armchair, knees drawn to her chest, wrapped in a soft oversized shawl, head bowed and resting on her knees, face hidden, thick long loose wavy hair falling over her shoulder and down her back with visible separate strands, a small simple ceramic cup on the floor beside the chair, mood of quiet rest and being completely at ease and unobserved, age ambiguous, antique engraving, fine slightly uneven etched line, delicate hatching, warm graphite #3A3230 and sepia #6B5B4E, faint translucent lavender watercolor wash #B8A9C9 at 15 percent, isolated on transparent background, vertical composition, no frame, no text, no dramatic shadows, no bright colors.
 
 ---
 
