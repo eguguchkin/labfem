@@ -37,6 +37,7 @@
   --measure: 660px;   /* ширина текстовой колонки, ≤75 знаков */
   --spread: 1200px;   /* ширина разворота */
   --fade: 180px;      /* длина перехода тона между главами */
+  --paper-age: 1;     /* сила «возраста» бумаги: 0 — чистый лист, 1.5 — заметно старше */
 
   /* модульная шкала в rem: на мобильных корень 16px, и вся шкала дышит сама */
   --fs-folio: .75rem;                  /* служебная мелочь: навигация, фолио, legal */
@@ -76,15 +77,28 @@ body {
 p { text-wrap: pretty; orphans: 2; widows: 2; }
 h1, h2, h3 { text-wrap: balance; }
 
-/* зерно бумаги поверх всего — едва заметное */
+/* волокна и зерно листа поверх всего: материал, а не обои.
+   Фактуры режет tools/paper.py из сырья модели (assets-src/t*.jpg) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 59;
+  pointer-events: none;
+  opacity: var(--paper-age);
+  background: url("assets/img/t1-paper.webp") 0 0 / 512px 512px repeat;
+}
+
+/* рамка разворота: одна фиксированная виньетка экрана вместо кромочных теней
+   у каждой главы — у стыков глав и разделителей не возникает резких границ */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 1;
   pointer-events: none;
-  opacity: .5;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");
+  opacity: var(--paper-age);
+  box-shadow: inset 0 0 110px -34px rgba(122, 104, 82, .05);
 }
 
 img { max-width: 100%; height: auto; }
@@ -271,12 +285,33 @@ a { color: inherit; }
 /* ── главы-развороты ────────────────────────────────── */
 section {
   position: relative;
+  isolation: isolate;  /* разводы (::before с z-index:-1) ложатся на фон главы, а не под него */
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 120px 48px;
 }
+
+/* разводы: влага, когда-то тронувшая лист. Лежат в бумаге, под чернилами;
+   зеркалим по главам, чтобы развороты не повторялись */
+section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: calc(var(--paper-age) * .9);
+  background: url("assets/img/t2-bloom.webp") center / cover no-repeat;
+  /* к кромкам главы разводы сходят на нет: стык с соседней главой
+     и разделителем остаётся непрерывным */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+section:nth-of-type(even)::before { transform: scaleX(-1); }
+section:nth-of-type(3n)::before { transform: scaleY(-1); background-position: 38% 62%; }
+section:nth-of-type(6n)::before { transform: scale(-1); }
+section:nth-of-type(4n+1)::before { background-position: 62% 34%; }
 
 .section-inner {
   width: 100%;
@@ -341,7 +376,39 @@ section {
 .section-title {
   flex-direction: column;
   text-align: center;
-  background: linear-gradient(180deg, var(--parchment) 0%, var(--milk-paper) 85%);
+  /* патина в углах — только титульный разворот, едва заметная */
+  background-image:
+    radial-gradient(42% 34% at 0% 0%, rgba(150, 128, 100, .05), rgba(150, 128, 100, 0) 72%),
+    radial-gradient(26% 30% at 100% 6%, rgba(150, 128, 100, .03), rgba(150, 128, 100, 0) 74%),
+    linear-gradient(180deg, var(--parchment) 0%, var(--milk-paper) 85%);
+}
+
+/* тончайшие заломы — лист когда-то сложили и разгладили; два на весь сайт */
+.section-title::after,
+.section-format::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+.section-title::after {  /* разглаженное «собачье ухо»: угол чуть светлее, на границе — волосяная линия */
+  top: 0; right: 0;
+  width: 300px; height: 210px;
+  background-image: linear-gradient(218deg,
+    rgba(255, 253, 246, .09) 0 42%,
+    rgba(255, 253, 246, 0) 46.5%,
+    rgba(126, 106, 82, .055) 49.5% 50.5%,
+    rgba(126, 106, 82, 0) 55% 100%);
+}
+.section-format::after {  /* длинная мягкая складка внизу главы VII */
+  left: 0; bottom: 12%;
+  width: 100%; height: 220px;
+  background-image: linear-gradient(176deg,
+    rgba(245, 240, 232, 0) 0 42%,
+    rgba(126, 106, 82, .05) 46.5% 48%,
+    rgba(126, 106, 82, 0) 52%,
+    rgba(255, 253, 246, .06) 62% 80%,
+    rgba(245, 240, 232, 0) 100%);
 }
 .section-title .section-inner {
   display: flex;
@@ -1027,6 +1094,6 @@ section {
 }
 
 @media print {
-  .nav-contents, .mobile-nav, .page-indicator, .title-scroll-hint, body::after { display: none; }
+  .nav-contents, .mobile-nav, .page-indicator, .title-scroll-hint, body::before, body::after { display: none; }
   section { min-height: 0; padding: 24px 0; page-break-inside: avoid; }
 }

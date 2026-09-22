@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 import numpy as np  # pyright: ignore[reportMissingImports] — пакет лежит в проектном .venv
-from manifest import ASSETS
+from manifest import ASSETS, PAPER
 from PIL import (  # pyright: ignore[reportMissingImports] — пакет лежит в проектном .venv
     Image,
     ImageFilter,
@@ -91,6 +91,6 @@ if __name__ == "__main__":
     for arg in sys.argv[1:]:
         if arg.startswith("--out="):  # своя папка назначения, например site_v2/assets/img
             OUT = (ROOT / arg[6:]).resolve() if not arg[6:].startswith("/") else Path(arg[6:])
-    ids = [a for a in sys.argv[1:] if not a.startswith("--")] or list(ASSETS)
+    ids = [a for a in sys.argv[1:] if not a.startswith("--")] or [a for a in ASSETS if a not in PAPER]
     for aid in ids:
         print(process(aid), flush=True)

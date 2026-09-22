@@ -89,6 +89,25 @@ ASSETS["p1-veronika"] = (V, 640, "Portrait of one specific real woman taken from
 
 ASSETS["p2-polina"] = (V, 640, "Portrait of one specific real woman taken from the reference photo. Preserve her exact identity and facial likeness above all: soft round face, calm closed-lip half smile, large light grey-green eyes, straight natural brows, full lips, long wavy light-brown hair well below the shoulders with a side part, thin pendant necklace, age about thirty. Change only the medium: render her as an antique book engraving portrait, head and shoulders, simple timeless dark blouse, fine antique etching, thin slightly uneven living line, delicate hatching and stippling, warm graphite #3A3230 and sepia #6B5B4E ink, very faint evenly diffused lavender watercolor wash #B8A9C9 at 10 percent, aged book illustration, vertical composition, clean plain paper background without any hatched or textured rectangle, no frame.", PTAIL, {"lossy": 88})
 
+# --- фактуры бумаги (режет tools/paper.py, не ink.py: лист здесь ровный целиком) ---
+# Общий TAIL не годится: он запрещает coffee stains и vignette, а нам нужны
+# благородные следы возраста. Хвост свой, «грязь» по-прежнему под запретом.
+TTAIL = (
+    " Flat even diffuse lighting without any shadow or highlight, the whole canvas filled"
+    " edge to edge with a uniform warm milky paper tone " + BG + ", very high key, quiet"
+    " and delicate. Avoid: objects, subjects, people, hands, text, letters, numbers,"
+    " drawings, illustration, frame, border, vignette, pure white, pure black, neon or"
+    " oversaturated colors, glossy 3D render, plastic, harsh digital gradients, dirt,"
+    " grime, grunge, mold, dust, coffee rings, tears, burnt edges, watermark, logo,"
+    " stock photo."
+)
+
+ASSETS["t1-paper"] = (S, 1024, "All-over seamless surface texture of a sheet of handmade cotton rag paper seen very close: fine chaotic plant fibers, tiny pulp flecks and a faint cloud-like unevenness of the pulp, tone variation within three percent of the base cream, no subject and no composition, the texture continues past every edge.", TTAIL, {"lossy": 82})
+
+PAPER = ("t1-paper", "t2-bloom")  # их обрабатывает paper.py, ink.py их пропускает
+
+ASSETS["t2-bloom"] = (V, 1024, "Very faint noble age marks on an old book page: two or three soft irregular water blooms with barely visible tide lines, a handful of tiny pale foxing speckles, gentle uneven tone near the edges of the sheet, every mark no darker than five percent of the paper tone, no subject and no composition, the marks spread loosely over the whole page.", TTAIL, {"lossy": 82})
+
 # референсы для image-to-image (портреты авторов)
 REFS = {
     "p1-veronika": "raw/veronika-art-2.png",
