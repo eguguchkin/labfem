@@ -22,8 +22,8 @@ TAIL = (
 
 V, S, W = "1024x1536", "1024x1024", "1536x1024"
 
-# id: (size, target_width_px, prompt без хвоста)
-ASSETS = {
+# id: (size, target_width_px, prompt без хвоста[, свой хвост вместо TAIL])
+ASSETS: dict[str, tuple] = {
     # --- орнаментика ---
     "b1-divider": (W, 760, "Horizontal botanical divider, one slightly uneven hairline in warm ochre #C4A265 at 50 percent opacity stretching across the full width, a small six-petal flower with two tiny leaves at the center, line tapers gracefully toward both ends, antique pen-drawn engraving, warm graphite #3A3230 and ochre, very wide low horizontal composition centered in the frame, no baroque curls, no bright colors."),
     "b2-dots": (S, 220, "Three tiny five-petal flowers in a horizontal row, separated by small delicate dots, fine antique etched line, warm graphite #3A3230, subtle stipple centers, minimal book ornament, wide low horizontal composition centered in the frame, no bright colors."),
@@ -74,3 +74,23 @@ ASSETS = {
 
 # уже сгенерировано отдельно, но держим в манифесте для пересборки
 ASSETS["c1-title"] = (V, 520, "A single branch of blossoming apple tree with three open blossoms, two buds and delicate leaves, diagonal composition, antique botanical engraving and etching, fine slightly uneven living line, delicate hatching and stippling, scientific accuracy with poetic softness, warm graphite #3A3230 and sepia #6B5B4E ink, translucent hand-colored watercolor wash dusty rose #C9A9A0 at 20 percent on petals only, wash slightly irregular and barely beyond contour, aged book illustration, vertical composition, no gloss, no heavy shadow.")
+
+# портреты авторов: гравюра с сохранением сходства с фото из raw/.
+# Общий TAIL не годится (в нём "smiling models"), поэтому свой хвост четвёртым элементом.
+PTAIL = (
+    " Plain flat uniform warm milky paper background #F5F0E8 filling the whole canvas."
+    " Avoid: photographic realism, glossy photo texture, color photograph look, neon or"
+    " oversaturated colors, heavy baroque ornaments, text, letters, numbers, watermark,"
+    " logo, frame around subject, vignette, pure white, pure black, thick cartoon"
+    " contours, childish illustration."
+)
+
+ASSETS["p1-veronika"] = (V, 640, "Portrait of one specific real woman taken from the reference photo. Preserve her exact identity and facial likeness above all: oval face, warm open smile with visible teeth, dark brown eyes, full straight-cut fringe covering the brow, very long straight dark chestnut hair falling over the shoulders, age about thirty five. Change only the medium: render her as an antique book engraving portrait, head and shoulders, simple timeless light blouse, fine antique etching, thin slightly uneven living line, delicate hatching and stippling, warm graphite #3A3230 and sepia #6B5B4E ink, faint translucent dusty-rose watercolor wash #C9A9A0 at 12 percent, aged book illustration, vertical composition, clean plain paper background without any hatched or textured rectangle, no frame.", PTAIL, {"lossy": 88})
+
+ASSETS["p2-polina"] = (V, 640, "Portrait of one specific real woman taken from the reference photo. Preserve her exact identity and facial likeness above all: soft round face, calm closed-lip half smile, large light grey-green eyes, straight natural brows, full lips, long wavy light-brown hair well below the shoulders with a side part, thin pendant necklace, age about thirty. Change only the medium: render her as an antique book engraving portrait, head and shoulders, simple timeless dark blouse, fine antique etching, thin slightly uneven living line, delicate hatching and stippling, warm graphite #3A3230 and sepia #6B5B4E ink, very faint evenly diffused lavender watercolor wash #B8A9C9 at 10 percent, aged book illustration, vertical composition, clean plain paper background without any hatched or textured rectangle, no frame.", PTAIL, {"lossy": 88})
+
+# референсы для image-to-image (портреты авторов)
+REFS = {
+    "p1-veronika": "raw/veronika-art-2.png",
+    "p2-polina": "raw/polina-art-2.png",
+}

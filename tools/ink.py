@@ -11,13 +11,21 @@ import sys
 from pathlib import Path
 
 import numpy as np  # pyright: ignore[reportMissingImports] — пакет лежит в проектном .venv
-from PIL import Image, ImageFilter  # pyright: ignore[reportMissingImports] — пакет лежит в проектном .venv
-
 from manifest import ASSETS
+from PIL import (  # pyright: ignore[reportMissingImports] — пакет лежит в проектном .venv
+    Image,
+    ImageFilter,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "assets-src"
-OUT = ROOT / "site" / "assets" / "img"
+OUT = ROOT / "site" / "assets" / "img"  # перезаписывается через --out=DIR (site_v2 и др.)
+
+
+def raw_for(aid: str):
+    """CLI пишет .png или .jpg (по mime ответа), engrave.py — .png: берём свежайший."""
+    cands = [p for p in (RAW / f"{aid}.png", RAW / f"{aid}.jpg", RAW / f"{aid}.jpeg") if p.exists()]
+    return max(cands, key=lambda p: p.stat().st_mtime) if cands else None
 
 
 def cut(im: Image.Image) -> np.ndarray:
@@ -44,13 +52,13 @@ def cut(im: Image.Image) -> np.ndarray:
 def process(aid: str) -> str:
     """Один ассет; битый сырой файл не роняет весь батч."""
     try:
-        src = RAW / f"{aid}.png"
-        if not src.exists():
+        src = raw_for(aid)
+        if src is None:
             return f"skip {aid} (нет сырья)"
         dst = OUT / f"{aid}.webp"
         if dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime:
             return f"skip {aid} (готово)"
-        _, width, _ = ASSETS[aid]
+        width = ASSETS[aid][1]
         rgba = Image.fromarray(cut(Image.open(src)), "RGBA")
 
         alpha = np.asarray(rgba)[:, :, 3]
@@ -68,13 +76,21 @@ def process(aid: str) -> str:
 
         OUT.mkdir(parents=True, exist_ok=True)
         dst = OUT / f"{aid}.webp"
-        rgba.save(dst, "WEBP", lossless=True, method=6)
+        opt = ASSETS[aid][4] if len(ASSETS[aid]) > 4 else {}
+        if opt.get("lossy"):
+            # фотопортреты: lossless раздувает карандашную микротень в мегабайты
+            rgba.save(dst, "WEBP", quality=int(opt["lossy"]), method=6)
+        else:
+            rgba.save(dst, "WEBP", lossless=True, method=6)
         return f"ok   {aid} {rgba.width}x{rgba.height} -> {dst.stat().st_size // 1024}KB"
     except Exception as err:  # noqa: BLE001 — намеренно широко: это пакетный скрипт
         return f"FAIL {aid}: {err}"
 
 
 if __name__ == "__main__":
+    for arg in sys.argv[1:]:
+        if arg.startswith("--out="):  # своя папка назначения, например site_v2/assets/img
+            OUT = (ROOT / arg[6:]).resolve() if not arg[6:].startswith("/") else Path(arg[6:])
     ids = [a for a in sys.argv[1:] if not a.startswith("--")] or list(ASSETS)
     for aid in ids:
         print(process(aid), flush=True)
