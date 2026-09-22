@@ -18,6 +18,14 @@
   --sage: #8B9478;
   --warm-ochre: #C4A265;
   --terracotta: #B07D6A;
+
+  /* «чернильные» ступени акцентных цветов: текст не бывает прозрачным,
+     тишина делается цветом, а не альфой (≥4.5:1 на всех пяти фонах) */
+  --ochre-deep: #7E6128;   /* буквицы, номера глав, акцентные линейки */
+  --terra-deep: #8E5C49;   /* даты встреч */
+  --rose-deep: #7E5B52;    /* ссылки, приглашения, маргиналии */
+  --lav-deep: #746489;     /* лавандовые пометки */
+  --sage-deep: #646E58;    /* примечания форм */
   --page-shadow: #E5DDD0;
   --link-hover: #B08D84;
   --btn-hover: #E8E0D2;
@@ -29,6 +37,19 @@
   --measure: 660px;   /* ширина текстовой колонки, ≤75 знаков */
   --spread: 1200px;   /* ширина разворота */
   --fade: 180px;      /* длина перехода тона между главами */
+
+  /* модульная шкала в rem: на мобильных корень 16px, и вся шкала дышит сама */
+  --fs-folio: .75rem;                  /* служебная мелочь: навигация, фолио, legal */
+  --fs-note: .9rem;                    /* примечания, кнопки, приглашения */
+  --fs-small: .95rem;                  /* вторичный текст: описания, био */
+  --fs-body: 1.05rem;                  /* основной текст */
+  --fs-h3: 1.35rem;                    /* заголовки карточек, шагов, встреч */
+  --fs-name: 1.55rem;                  /* имена */
+  --fs-pull: 1.6rem;                   /* врезки и выносные цитаты */
+  --fs-closing: 1.7rem;                /* финальная фраза */
+  --fs-sub: clamp(1.15rem, 2.2vw, 1.4rem);  /* подзаголовок главы */
+  --fs-h2: clamp(1.9rem, 4.2vw, 2.6rem);    /* заголовок главы */
+  --fs-h1: clamp(2.4rem, 5.4vw, 3.55rem);   /* титул */
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,7 +69,12 @@ body {
   background-color: var(--milk-paper);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  font-variant-numeric: oldstyle-nums;  /* старостильные цифры: даты, фолио */
+  hanging-punctuation: first;
 }
+
+p { text-wrap: pretty; orphans: 2; widows: 2; }
+h1, h2, h3 { text-wrap: balance; }
 
 /* зерно бумаги поверх всего — едва заметное */
 body::after {
@@ -90,7 +116,7 @@ a { color: inherit; }
   transform: translate(-50%, -200%);
   z-index: 200;
   padding: 8px 20px;
-  font: italic 15px/1 var(--text);
+  font: italic .85rem/1 var(--text);
   color: var(--warm-graphite);
   background: var(--parchment);
   border: 1px solid var(--page-shadow);
@@ -129,23 +155,21 @@ a { color: inherit; }
 }
 
 .nav-word {
-  font: italic 14px/1 var(--text);
-  letter-spacing: .05em;
-  color: var(--warm-graphite);
-  opacity: .45;
+  font: italic var(--fs-folio)/1 var(--text);
+  letter-spacing: .08em;
+  color: var(--sepia);
 }
 
 .nav-contents a {
-  font-size: 13px;
-  letter-spacing: .05em;
-  color: var(--warm-graphite);
-  opacity: .55;
+  font-size: var(--fs-folio);
+  letter-spacing: .08em;
+  color: var(--sepia);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: opacity .3s ease, color .3s ease, border-color .3s ease;
+  transition: color .3s ease, border-color .3s ease;
 }
-.nav-contents a:hover { opacity: 1; color: var(--link-hover); border-color: var(--dusty-pink); }
-.nav-contents a.active { opacity: .9; color: var(--ink); }
+.nav-contents a:hover { color: var(--rose-deep); border-color: var(--dusty-pink); }
+.nav-contents a.active { color: var(--ink); }
 
 .nav-dot {
   width: 3px; height: 3px;
@@ -184,14 +208,14 @@ a { color: inherit; }
   position: absolute;
   right: 18px; top: 50%;
   transform: translateY(-50%);
-  font: italic 13px/1 var(--text);
-  color: var(--warm-graphite);
+  font: italic var(--fs-folio)/1 var(--text);
+  color: var(--sepia);
   opacity: 0;
   white-space: nowrap;
   pointer-events: none;
   transition: opacity .3s ease;
 }
-.page-dot:hover::after, .page-dot.active::after { opacity: .45; }
+.page-dot:hover::after, .page-dot.active::after { opacity: 1; }
 
 /* ── оглавление на мобильных ────────────────────────── */
 .mobile-nav {
@@ -237,13 +261,12 @@ a { color: inherit; }
 .mobile-menu[hidden] { display: none; }
 .mobile-menu a {
   font-family: var(--head);
-  font-size: 24px;
-  color: var(--warm-graphite);
+  font-size: var(--fs-h3);
+  color: var(--sepia);
   text-decoration: none;
-  opacity: .7;
-  transition: opacity .3s ease, color .3s ease;
+  transition: color .3s ease;
 }
-.mobile-menu a:hover { opacity: 1; color: var(--link-hover); }
+.mobile-menu a:hover { color: var(--ink); }
 
 /* ── главы-развороты ────────────────────────────────── */
 section {
@@ -268,31 +291,29 @@ section {
 
 .section-number {
   font-family: var(--head);
-  font-size: 14px;
+  font-size: .85rem;
   font-style: italic;
-  letter-spacing: .14em;
-  color: var(--warm-ochre);
-  opacity: .75;
-  margin-bottom: 14px;
+  letter-spacing: .16em;
+  color: var(--ochre-deep);
+  margin-bottom: 16px;
 }
 
 .section-heading {
   font-family: var(--head);
   font-weight: 400;
-  font-size: clamp(30px, 4vw, 44px);
-  line-height: 1.2;
+  font-size: var(--fs-h2);
+  line-height: 1.15;
   color: var(--ink);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .section-subheading {
   font-family: var(--head);
   font-style: italic;
-  font-weight: 300;
-  font-size: clamp(18px, 2.4vw, 23px);
+  font-weight: 400;
+  font-size: var(--fs-sub);
   line-height: 1.5;
   color: var(--sepia);
-  opacity: .85;
   margin-bottom: 8px;
 }
 
@@ -351,10 +372,10 @@ section {
 
 .title-main {
   font-family: var(--head);
-  font-weight: 300;
-  font-size: clamp(38px, 5.4vw, 66px);
-  line-height: 1.15;
-  letter-spacing: .06em;
+  font-weight: 400;
+  font-size: var(--fs-h1);
+  line-height: 1.12;
+  letter-spacing: .05em;
   color: var(--ink);
   margin-bottom: 28px;
 }
@@ -362,8 +383,8 @@ section {
 .title-sub {
   font-family: var(--head);
   font-style: italic;
-  font-weight: 300;
-  font-size: clamp(18px, 2.3vw, 23px);
+  font-weight: 400;
+  font-size: clamp(1.1rem, 2.2vw, 1.3rem);
   line-height: 1.55;
   color: var(--sepia);
   max-width: 520px;
@@ -371,29 +392,27 @@ section {
 }
 
 .title-folio {
-  font-size: 14px;
+  font-size: var(--fs-folio);
   font-style: italic;
-  letter-spacing: .1em;
-  color: var(--warm-graphite);
-  opacity: .45;
+  letter-spacing: .08em;
+  color: var(--sepia);
 }
 
 .title-scroll-hint {
   position: absolute;
   bottom: 44px; left: 50%;
   transform: translateX(-50%);
-  font-size: 13px;
+  font-size: var(--fs-folio);
   letter-spacing: .12em;
-  color: var(--warm-graphite);
-  opacity: .3;
+  color: var(--sepia);
   animation: gentlePulse 4s ease-in-out infinite;
   transition: opacity 1s ease;
 }
 /* гаснет после первого листания: animation перебивает inline-стиль, поэтому классом */
 .title-scroll-hint.gone { opacity: 0; animation: none; }
 @keyframes gentlePulse {
-  0%, 100% { opacity: .25; }
-  50% { opacity: .5; }
+  0%, 100% { opacity: .9; }
+  50% { opacity: 1; }
 }
 
 /* ── 02 · фемина ────────────────────────────────────── */
@@ -411,22 +430,51 @@ section {
 }
 
 .body-text {
-  font-size: 18px;
-  line-height: 1.78;
+  font-size: var(--fs-body);
+  line-height: 1.72;
   color: var(--warm-graphite);
-  margin-bottom: 20px;
-  text-indent: 1.6em;
+  margin-bottom: 1.35rem;
 }
-.body-text:first-of-type { text-indent: 0; }
 
-/* буквица — живая типографика вместо отдельной картинки */
-.body-text:first-of-type::first-letter {
+/* буквица — живая типографика вместо отдельной картинки:
+   знак в три строки текста, цвет — охра в чернилах (≥3:1 для крупного знака) */
+.dropcap::first-letter {
   float: left;
   font-family: var(--head);
-  font-size: 3.4em;
-  line-height: .82;
-  margin: 6px 10px 0 0;
-  color: var(--warm-ochre);
+  font-weight: 500;
+  font-size: 7.2em;
+  line-height: .76;
+  margin: 8px 14px 0 0;
+  color: var(--ochre-deep);
+}
+
+/* разрядка первых слов после буквицы — приём инкунабул */
+.versal {
+  font-variant-caps: small-caps;
+  letter-spacing: .08em;
+}
+
+/* акцент первого уровня: курсив + чернила + волосяное подчёркивание */
+.hl {
+  font-style: italic;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--dusty-pink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .32em;
+}
+
+/* акцент второго уровня: врезка-вопрос в теле главы */
+.lead-question {
+  font-family: var(--head);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--fs-pull);
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 2rem 0 2rem;
+  padding-left: 1.4rem;
+  border-left: 1px solid var(--warm-ochre);
 }
 
 .femininity-figure img { display: block; width: 270px; margin: 0 auto; }
@@ -443,10 +491,9 @@ section {
 .margin-note img { width: 44px; opacity: .85; flex: none; }
 .margin-note span {
   font-family: var(--hand);
-  font-size: 17px;
+  font-size: 1rem;
   line-height: 1.5;
-  color: var(--link-hover);
-  opacity: .85;
+  color: var(--rose-deep);
 }
 
 /* ── 03 · оптика ────────────────────────────────────── */
@@ -459,13 +506,14 @@ section {
 
 .optics-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 48px 40px;
-  margin-top: 56px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 56px 72px;
+  max-width: 940px;
+  margin: 56px auto 0;
 }
 
 .optic-card {
-  padding: 28px 16px 24px;
+  padding: 32px 24px 28px;
   text-align: center;
   border-top: 1px solid rgba(229, 221, 208, .9);
 }
@@ -475,17 +523,16 @@ section {
 .optic-title {
   font-family: var(--head);
   font-weight: 400;
-  font-size: 23px;
+  font-size: var(--fs-h3);
   line-height: 1.3;
   color: var(--ink);
   margin-bottom: 14px;
 }
 
 .optic-desc {
-  font-size: 16px;
-  line-height: 1.68;
-  color: var(--warm-graphite);
-  opacity: .82;
+  font-size: var(--fs-small);
+  line-height: 1.65;
+  color: var(--sepia);
 }
 
 /* ── 04 · для кого ──────────────────────────────────── */
@@ -519,24 +566,31 @@ section {
 .sketch figcaption {
   flex: 1 1 0;
   min-width: 0;
-  font-size: 19px;
+  font-size: var(--fs-body);
   font-style: italic;
   line-height: 1.72;
   color: var(--warm-graphite);
 }
 .sketch figcaption::before { content: "— "; color: var(--dusty-pink); }
 
+/* выносная цитата — акцент второго уровня: звёздочка-цветочек над ней */
+.quote-star {
+  display: block;
+  width: 26px; height: 26px;
+  margin: 64px auto 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='%23C4A265' stroke-width='.9'%3E%3Cellipse cx='12' cy='7' rx='2' ry='4.6'/%3E%3Cellipse cx='12' cy='7' rx='2' ry='4.6' transform='rotate(60 12 12)'/%3E%3Cellipse cx='12' cy='7' rx='2' ry='4.6' transform='rotate(120 12 12)'/%3E%3Cellipse cx='12' cy='7' rx='2' ry='4.6' transform='rotate(180 12 12)'/%3E%3Cellipse cx='12' cy='7' rx='2' ry='4.6' transform='rotate(240 12 12)'/%3E%3Cellipse cx='12' cy='7' rx='2' ry='4.6' transform='rotate(300 12 12)'/%3E%3Ccircle cx='12' cy='12' r='1.3'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 .section-quote {
   font-family: var(--head);
   font-style: italic;
-  font-weight: 300;
-  font-size: clamp(19px, 2.4vw, 22px);
-  line-height: 1.6;
+  font-weight: 400;
+  font-size: var(--fs-pull);
+  line-height: 1.55;
   text-align: center;
-  color: var(--sepia);
-  opacity: .8;
-  max-width: 500px;
-  margin: 56px auto 0;
+  color: var(--ink);
+  max-width: 560px;
+  margin: 20px auto 0;
 }
 
 /* ── 05 · о нас ─────────────────────────────────────── */
@@ -569,14 +623,14 @@ section {
 .about-name {
   font-family: var(--head);
   font-weight: 400;
-  font-size: 27px;
+  font-size: var(--fs-name);
   color: var(--ink);
   margin-bottom: 16px;
 }
 
 .about-text {
-  font-size: 17px;
-  line-height: 1.72;
+  font-size: var(--fs-small);
+  line-height: 1.7;
   color: var(--warm-graphite);
   max-width: 380px;
   margin: 0 auto 14px;
@@ -585,8 +639,8 @@ section {
 
 .about-note {
   font-family: var(--hand);
-  font-size: 17px;
-  color: var(--lavender);
+  font-size: 1rem;
+  color: var(--lav-deep);
   margin-top: 22px;
 }
 
@@ -595,7 +649,7 @@ section {
 .section-meetings .section-image { margin-bottom: 40px; }
 
 .meetings-list {
-  max-width: 720px;
+  max-width: 660px;
   margin: 0 auto;
   list-style: none;
 }
@@ -610,31 +664,32 @@ section {
 .meeting-item + .meeting-item { border-top: 1px solid rgba(229, 221, 208, .9); }
 
 .meeting-date {
-  font-size: 16px;
-  letter-spacing: .02em;
-  color: var(--terracotta);
+  font-size: var(--fs-note);
+  letter-spacing: .04em;
+  color: var(--terra-deep);
 }
 
 .meeting-title {
   font-family: var(--head);
   font-weight: 400;
-  font-size: 22px;
+  font-size: var(--fs-h3);
   line-height: 1.3;
   color: var(--ink);
   margin-bottom: 6px;
 }
 
 .meeting-desc {
-  font-size: 16px;
-  line-height: 1.62;
-  color: var(--warm-graphite);
-  opacity: .78;
+  font-size: var(--fs-small);
+  line-height: 1.65;
+  color: var(--sepia);
 }
 
-/* прошедшие — чуть выцветшие, как записи в архиве */
-.meeting-item.past { opacity: .62; }
+/* прошедшие — записи в архиве: сепия вместо прозрачности */
+.meeting-item.past .meeting-date,
+.meeting-item.past .meeting-title,
+.meeting-item.past .meeting-desc { color: var(--sepia); }
 
-/* ближайшие — полный цвет и тонкая розовая линия слева */
+/* ближайшие — полный цвет, чернильная дата и тонкая розовая линия слева */
 .meeting-item.upcoming { position: relative; }
 .meeting-item.upcoming::before {
   content: "";
@@ -644,11 +699,23 @@ section {
   background-color: var(--dusty-pink);
   opacity: .55;
 }
+.meeting-item.upcoming .meeting-date {
+  font-family: var(--text);
+  font-weight: 500;
+  color: var(--terra-deep);
+}
 
-/* будущие — наброски: пунктир и курсив */
-.meeting-item.future { opacity: .55; }
+/* будущие — наброски: пунктир, курсив, сепия */
+.meeting-item.future { position: relative; }
+.meeting-item.future::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 30px; bottom: 30px;
+  border-left: 1px dashed var(--dusty-pink);
+  opacity: .7;
+}
 .meeting-item.future .meeting-title,
-.meeting-item.future .meeting-desc { font-style: italic; }
+.meeting-item.future .meeting-desc { font-style: italic; color: var(--sepia); }
 .meeting-item.future .meeting-date { color: var(--sepia); }
 
 /* ── 07 · формат ────────────────────────────────────── */
@@ -686,25 +753,24 @@ section {
 .format-step-title {
   font-family: var(--head);
   font-weight: 400;
-  font-size: 25px;
+  font-size: var(--fs-h3);
   line-height: 1.3;
   color: var(--ink);
   margin-bottom: 14px;
 }
 
 .format-step-text {
-  font-size: 18px;
-  line-height: 1.75;
+  font-size: var(--fs-body);
+  line-height: 1.72;
   color: var(--warm-graphite);
 }
 
 .formats-lead {
   font-family: var(--head);
   font-style: italic;
-  font-size: 20px;
+  font-size: 1.15rem;
   text-align: center;
   color: var(--sepia);
-  opacity: .8;
   margin: 72px auto 40px;
 }
 
@@ -730,29 +796,28 @@ section {
 .card-title {
   font-family: var(--head);
   font-weight: 400;
-  font-size: 24px;
+  font-size: var(--fs-h3);
   color: var(--ink);
   margin-bottom: 12px;
 }
 
 .card-desc {
-  font-size: 16px;
+  font-size: var(--fs-small);
   line-height: 1.65;
-  color: var(--warm-graphite);
-  opacity: .82;
+  color: var(--sepia);
   margin-bottom: 20px;
 }
 
 /* ссылка-приглашение, а не кнопка-призыв */
 .card-invite {
   font-style: italic;
-  font-size: 16px;
-  color: var(--dusty-pink);
+  font-size: var(--fs-note);
+  color: var(--rose-deep);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: color .3s ease, border-color .3s ease;
 }
-.card-invite:hover { color: var(--link-hover); border-color: currentColor; }
+.card-invite:hover { color: var(--terra-deep); border-color: currentColor; }
 
 /* ── 08 · рядом ─────────────────────────────────────── */
 .section-invitation {
@@ -771,8 +836,8 @@ section {
 .invitation-text {
   font-family: var(--head);
   font-style: italic;
-  font-weight: 300;
-  font-size: clamp(19px, 2.6vw, 24px);
+  font-weight: 400;
+  font-size: clamp(1.2rem, 2.6vw, 1.35rem);
   line-height: 1.6;
   color: var(--warm-graphite);
   max-width: 520px;
@@ -793,7 +858,7 @@ section {
   width: 100%;
   padding: 13px 20px;
   font-family: var(--text);
-  font-size: 17px;
+  font-size: var(--fs-small);
   font-style: italic;
   color: var(--warm-graphite);
   background: rgba(255, 253, 248, .45);
@@ -802,35 +867,34 @@ section {
   outline: none;
   transition: border-color .3s ease, background-color .3s ease;
 }
-.subscribe-input::placeholder { color: var(--warm-graphite); opacity: .4; }
+.subscribe-input::placeholder { color: var(--sepia); }
 .subscribe-input:focus { border-color: var(--dusty-pink); background: rgba(255, 253, 248, .7); }
 
 .subscribe-btn {
   padding: 10px 32px;
   font-family: var(--text);
-  font-size: 16px;
+  font-size: var(--fs-note);
   font-style: italic;
   letter-spacing: .02em;
-  color: var(--link-hover);
+  color: var(--rose-deep);
   background: transparent;
   border: 1px solid var(--dusty-pink);
   border-radius: 2px;
   cursor: pointer;
   transition: background-color .3s ease, color .3s ease, border-color .3s ease;
 }
-.subscribe-btn:hover { background-color: var(--btn-hover); border-color: var(--link-hover); }
+.subscribe-btn:hover { background-color: var(--btn-hover); color: var(--ink); border-color: var(--link-hover); }
 
 .form-note {
   font-style: italic;
-  font-size: 16px;
-  color: var(--sage);
+  font-size: var(--fs-note);
+  color: var(--sage-deep);
 }
 
 .legal {
-  font-size: 13px;
+  font-size: var(--fs-folio);
   font-style: italic;
-  color: var(--warm-graphite);
-  opacity: .38;
+  color: var(--sepia);
   margin-bottom: 40px;
 }
 
@@ -844,17 +908,16 @@ section {
 
 .social-link {
   display: block;
-  color: var(--warm-graphite);
-  opacity: .45;
-  transition: opacity .3s ease, color .3s ease;
+  color: var(--sepia);
+  transition: color .3s ease;
 }
-.social-link:hover { opacity: .9; color: var(--link-hover); }
+.social-link:hover { color: var(--rose-deep); }
 .social-link svg { display: block; width: 22px; height: 22px; }
 
 .closing-phrase {
   font-family: var(--head);
-  font-weight: 300;
-  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 400;
+  font-size: var(--fs-closing);
   line-height: 1.35;
   color: var(--ink);
   margin-bottom: 44px;
@@ -870,10 +933,9 @@ section {
 }
 .site-footer img { display: block; margin: 0 auto 16px; opacity: .7; }
 .site-footer p {
-  font-size: 13px;
+  font-size: var(--fs-folio);
   font-style: italic;
-  color: var(--warm-graphite);
-  opacity: .4;
+  color: var(--sepia);
 }
 
 /* ── адаптивность ───────────────────────────────────── */
@@ -885,7 +947,7 @@ section {
 @media (max-width: 1023px) {
   section { padding: 96px 32px; }
   .nav-contents { padding: 16px 24px 14px; gap: 6px 16px; }
-  .nav-contents a { font-size: 12px; }
+  .nav-contents a { font-size: .7rem; }
   .nav-word { display: none; }
   .page-indicator { display: none; }
 
@@ -919,7 +981,7 @@ section {
   .title-art { width: 190px; margin-bottom: 32px; }
   .title-scroll-hint { bottom: 28px; }
 
-  .body-text:first-of-type::first-letter { font-size: 3em; }
+  .dropcap::first-letter { font-size: 5.4em; }
   .margin-note { max-width: none; }
 
   .optics-grid { grid-template-columns: 1fr; gap: 28px; }
