@@ -86,7 +86,7 @@ body::before {
   z-index: 59;
   pointer-events: none;
   opacity: var(--paper-age);
-  background: url("assets/img/t1-paper.webp") 0 0 / 512px 512px repeat;
+  background: url("../img/t1-paper.webp") 0 0 / 512px 512px repeat;
 }
 
 /* рамка разворота: одна фиксированная виньетка экрана вместо кромочных теней
@@ -302,7 +302,7 @@ section::before {
   z-index: -1;
   pointer-events: none;
   opacity: calc(var(--paper-age) * .9);
-  background: url("assets/img/t2-bloom.webp") center / cover no-repeat;
+  background: url("../img/t2-bloom.webp") center / cover no-repeat;
   /* к кромкам главы разводы сходят на нет: стык с соседней главой
      и разделителем остаётся непрерывным */
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
