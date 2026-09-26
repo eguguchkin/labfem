@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SRC_DIR="$SCRIPT_DIR/v3/site"
+SRC_DIR="$SCRIPT_DIR/v5/site"
 DIST_DIR="$SCRIPT_DIR/dist"
 
 echo "🏗️  Начало сборки..."

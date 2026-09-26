@@ -1,0 +1,508 @@
+/* ============================================================
+   Лаборатория феминности — v5 «тёмный бархат»
+   Вся палитра и состояния — токенами в :root
+   ============================================================ */
+:root {
+  /* бархат и тени */
+  --velvet:        #07291b;   /* тёмно-зелёный бархат (фон) */
+  --velvet-deep:   #041a10;   /* глубокая тень */
+  --velvet-lift:   #0d3a29;   /* приподнятая поверхность */
+  /* золото и патина */
+  --gold:          #c5a36b;
+  --gold-bright:   #e4bf72;
+  --gold-dim:      #8a7030;
+  /* живопись */
+  --ivory:         #ece3d0;   /* основной текст */
+  --ivory-dim:     rgba(236, 227, 208, .68);
+  --ivory-faint:   rgba(236, 227, 208, .42);
+  --peach:         #d99a6c;
+  --wine:          #8a2318;
+  /* состояния */
+  --hover-glow:    rgba(228, 191, 114, .16);
+  --frame-line:    rgba(197, 163, 107, .55);
+  --frame-line-soft: rgba(197, 163, 107, .28);
+  /* формы */
+  --radius:        4px;
+  --arch:          999px;
+  --ease:          cubic-bezier(.22, .8, .3, 1);
+  --t-fast:        .28s;
+  --t-slow:        .9s;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; background: var(--velvet-deep); }
+
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  background:
+    radial-gradient(120% 90% at 50% 0%, transparent 40%, rgba(1, 10, 6, .78) 100%),
+    url("../img/tex/velvet-emerald-tile.webp") center / 1024px repeat;
+}
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: url("../img/tex/tempera-crackle-tile.png") center / 1024px repeat;
+  mix-blend-mode: overlay;
+  opacity: .12;
+  pointer-events: none;
+}
+
+body {
+  color: var(--ivory);
+  font-family: "EB Garamond", Georgia, serif;
+  font-size: clamp(17px, 1.15vw + 12px, 20px);
+  line-height: 1.65;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- бархатный фон: см. html::before / html::after ---------- */
+
+::selection { background: var(--gold-dim); color: var(--velvet-deep); }
+
+h1, h2, h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: .015em;
+  color: var(--ivory);
+}
+h1 { font-size: clamp(44px, 6vw, 84px); }
+h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold-bright);
+}
+h2 { font-size: clamp(32px, 3.6vw, 52px); }
+h3 { font-size: clamp(21px, 1.6vw, 26px); font-weight: 600; }
+
+p { color: var(--ivory-dim); }
+.muted { color: var(--ivory-faint); font-size: .92em; }
+.small { font-size: .82em; }
+
+img { display: block; max-width: 100%; height: auto; }
+
+a { color: inherit; }
+
+/* ---------- золотая ссылка ---------- */
+.gold-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .5em;
+  color: var(--gold);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.06em;
+  font-style: italic;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), text-shadow var(--t-fast) var(--ease);
+}
+.gold-link:hover {
+  color: var(--gold-bright);
+  border-color: var(--frame-line);
+  text-shadow: 0 0 18px var(--hover-glow);
+}
+.gold-link .arrow {
+  font-style: normal;
+  font-size: .9em;
+  transition: transform var(--t-fast) var(--ease);
+}
+.gold-link:hover .arrow { transform: translateX(.3em); }
+a.gold-link[href="#"] .arrow { transition: none; }
+
+/* ---------- каркас секций ---------- */
+main { position: relative; }
+
+.section {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(72px, 10vh, 128px) clamp(20px, 4vw, 48px);
+}
+
+.section.narrow { max-width: 860px; }
+
+.section-head { margin-bottom: clamp(36px, 5vh, 56px); }
+.sec-num {
+  display: block;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 15px;
+  letter-spacing: .38em;
+  color: var(--gold-dim);
+  margin-bottom: 10px;
+}
+.sec-lead {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: clamp(19px, 1.6vw, 24px);
+  color: var(--gold);
+  margin-top: 14px;
+}
+
+.prose p + p { margin-top: 1.1em; }
+
+/* ---------- рамка-картина ---------- */
+.canvas {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--frame-line-soft);
+  outline: 1px solid var(--frame-line);
+  outline-offset: 6px;
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, .55),
+    0 6px 18px rgba(0, 0, 0, .4);
+  transition: transform var(--t-slow) var(--ease), box-shadow var(--t-slow) var(--ease), outline-color var(--t-slow) var(--ease);
+}
+.canvas img { width: 100%; object-fit: cover; }
+.canvas:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 44px 90px rgba(0, 0, 0, .6),
+    0 0 40px var(--hover-glow);
+  outline-color: var(--frame-line);
+}
+/* арочная рамка */
+.canvas.arch { border-radius: 50% 50% var(--radius) var(--radius) / 24% 24% var(--radius) var(--radius); }
+
+/* ---------- герой ---------- */
+.hero { min-height: 100svh; display: flex; align-items: center; padding-top: clamp(96px, 14vh, 160px); }
+.hero-frame {
+  display: grid;
+  grid-template-columns: minmax(280px, 460px) 1fr;
+  gap: clamp(36px, 6vw, 96px);
+  align-items: center;
+  width: 100%;
+}
+.hero-canvas { max-height: 82svh; }
+.hero-canvas img { height: 100%; }
+.hero-text { max-width: 560px; }
+.hero-emblem {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  border: 1px solid var(--frame-line-soft);
+  outline: 1px solid var(--frame-line);
+  outline-offset: 4px;
+  margin-bottom: 34px;
+  opacity: .95;
+}
+.hero-sub {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: clamp(20px, 1.9vw, 26px);
+  color: var(--ivory-dim);
+  margin: 26px 0 36px;
+  max-width: 26em;
+}
+
+/* ---------- разделитель-флерон ---------- */
+.divider {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+  opacity: .85;
+}
+
+/* ---------- сплит-секции (02, 04) ---------- */
+.split {
+  display: grid;
+  grid-template-columns: minmax(260px, 440px) 1fr;
+  gap: clamp(36px, 6vw, 88px);
+  align-items: center;
+}
+.split-rev { grid-template-columns: 1fr minmax(260px, 400px); }
+.split-rev .split-img { order: 2; }
+.split-img { max-width: 480px; justify-self: center; aspect-ratio: 4 / 5; }
+.split-img img { width: 100%; height: 100%; object-fit: cover; }
+.soft-list { list-style: none; margin: 1em 0; }
+.soft-list li {
+  position: relative;
+  padding-left: 1.6em;
+  margin: .7em 0;
+  color: var(--ivory-dim);
+}
+.soft-list li::before {
+  content: "";
+  position: absolute;
+  left: .1em; top: .58em;
+  width: .55em; height: .55em;
+  background: var(--gold-dim);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  opacity: .8;
+}
+
+/* ---------- оптика (03) ---------- */
+.optics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: clamp(20px, 2.6vw, 32px);
+}
+.optic {
+  position: relative;
+  padding: 34px 26px 30px;
+  background: linear-gradient(170deg, rgba(11, 51, 36, .5), rgba(2, 19, 11, .35));
+  border: 1px solid var(--frame-line-soft);
+  border-radius: var(--radius);
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-slow) var(--ease);
+}
+.optic:hover {
+  border-color: var(--frame-line);
+  background: linear-gradient(170deg, rgba(11, 51, 36, .72), rgba(2, 19, 11, .5));
+  transform: translateY(-3px);
+}
+.optic-orn { margin-bottom: 18px; opacity: .9; }
+.optic h3 { margin-bottom: 10px; color: var(--gold); }
+.optic p { font-size: .95em; }
+
+/* ---------- авторы (05) ---------- */
+.authors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 420px));
+  justify-content: center;
+  gap: clamp(36px, 5vw, 72px);
+}
+.author-canvas {
+  max-width: 380px;
+  aspect-ratio: 2 / 3;
+  margin: 0 auto 30px;
+}
+.author-canvas img { width: 100%; height: 100%; object-fit: cover; }
+/* Вероника: смещаем кадр, чтобы лицо и жест не срезались */
+.author-canvas img.pos-r { object-position: 66% 20%; }
+.author-text { text-align: center; max-width: 420px; margin: 0 auto; }
+.author-text h3 {
+  font-size: clamp(26px, 2.2vw, 32px);
+  color: var(--gold-bright);
+  font-weight: 600;
+}
+.author-role {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  color: var(--gold);
+  margin: 6px 0 16px;
+}
+.author-text p:not(.author-role) {
+  font-size: .93em;
+  text-align: left;
+}
+
+/* ---------- циклы (06) ---------- */
+.cycles {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(24px, 3vw, 40px);
+}
+@media (min-width: 900px) {
+  .cycles { grid-template-columns: repeat(2, 1fr); }
+}
+.cycle-canvas { aspect-ratio: 700 / 915; margin-bottom: 22px; }
+.cycle-canvas img { width: 100%; height: 100%; object-fit: cover; }
+.cycle-status {
+  display: inline-block;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: .95em;
+  letter-spacing: .06em;
+  padding: 2px 14px;
+  border: 1px solid var(--frame-line-soft);
+  border-radius: var(--arch);
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.cycle-status.done { color: var(--ivory-faint); border-color: rgba(236,227,208,.18); }
+.cycle-status.soon {
+  color: var(--peach);
+  border-color: rgba(217, 154, 108, .45);
+  box-shadow: 0 0 22px rgba(217, 154, 108, .12);
+}
+.cycle h3 { color: var(--gold-bright); margin-bottom: 8px; }
+.cycle p { font-size: .95em; margin-bottom: 14px; }
+
+/* ---------- формат (07) ---------- */
+.format-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(20px, 2.6vw, 32px);
+}
+.format {
+  padding: 30px 28px;
+  border-top: 1px solid var(--frame-line-soft);
+  transition: border-color var(--t-fast) var(--ease);
+}
+.format:hover { border-top-color: var(--frame-line); }
+.format h3 { color: var(--gold); margin-bottom: 10px; }
+.format p { font-size: .95em; }
+
+/* ---------- приглашение (08) ---------- */
+.invitation { max-width: 1080px; }
+.panorama-canvas { margin-bottom: clamp(36px, 5vh, 56px); }
+.invite-text {
+  max-width: 620px;
+  margin: 0 auto;
+  text-align: center;
+}
+.invite-text > p:first-child {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(20px, 1.9vw, 25px);
+  font-style: italic;
+  color: var(--ivory);
+  margin-bottom: 30px;
+}
+.subscribe {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.subscribe input {
+  flex: 1 1 260px;
+  max-width: 340px;
+  padding: 13px 20px;
+  font: inherit;
+  color: var(--ivory);
+  background: rgba(2, 19, 11, .55);
+  border: 1px solid var(--frame-line-soft);
+  border-radius: var(--radius);
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.subscribe input::placeholder { color: var(--ivory-faint); font-style: italic; }
+.subscribe input:focus {
+  outline: none;
+  border-color: var(--frame-line);
+  box-shadow: 0 0 22px var(--hover-glow);
+}
+.gold-btn {
+  padding: 13px 30px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.05em;
+  font-style: italic;
+  letter-spacing: .04em;
+  color: var(--velvet-deep);
+  background: linear-gradient(160deg, var(--gold-bright), var(--gold) 60%, var(--gold-dim));
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: box-shadow var(--t-fast) var(--ease), transform var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
+}
+.gold-btn:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 6px 26px var(--hover-glow), 0 2px 8px rgba(0,0,0,.4);
+  transform: translateY(-1px);
+}
+.gold-btn:active { transform: translateY(0); }
+.subscribe-note {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  color: var(--peach);
+  margin-bottom: 14px;
+}
+.contacts { margin-top: 10px; }
+
+/* ---------- футер ---------- */
+.footer {
+  text-align: center;
+  padding: clamp(48px, 8vh, 88px) 20px 56px;
+}
+.footer img {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--frame-line-soft);
+  margin: 0 auto 18px;
+  opacity: .9;
+}
+.footer p { font-family: "Cormorant Garamond", serif; font-size: 1.1em; }
+
+/* ---------- боковая навигация ---------- */
+.side-nav {
+  position: fixed;
+  right: clamp(10px, 2vw, 26px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 10;
+}
+.side-dot {
+  position: relative;
+  display: block;
+  width: 9px; height: 9px;
+  border: 1px solid var(--frame-line-soft);
+  border-radius: 50%;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.side-dot:hover { border-color: var(--frame-line); }
+.side-dot.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 10px var(--hover-glow);
+}
+.side-num {
+  position: absolute;
+  right: 18px; top: 50%;
+  transform: translateY(-50%);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity var(--t-fast) var(--ease);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.side-dot:hover .side-num, .side-dot.active .side-num { opacity: .9; }
+
+@media (max-width: 900px) {
+  .side-nav { display: none; }
+  .hero { padding-top: 72px; }
+  .hero-frame, .split, .split-rev { grid-template-columns: 1fr; }
+  .split-rev .split-img { order: 0; }
+  .hero-canvas { max-width: 420px; margin: 0 auto; max-height: none; }
+  .split-img { max-width: 420px; }
+  .hero-text { text-align: center; margin: 0 auto; }
+  .hero-sub { margin-inline: auto; }
+}
+
+/* ---------- появление при скролле ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .canvas, .optic, .gold-btn, .gold-link .arrow { transition: none; }
+}
+
+/* ---------- тост ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 20px);
+  padding: 12px 26px;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 1.05em;
+  color: var(--ivory);
+  background: rgba(2, 19, 11, .9);
+  border: 1px solid var(--frame-line);
+  border-radius: var(--arch);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+  z-index: 20;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
