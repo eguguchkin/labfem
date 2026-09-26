@@ -4,6 +4,11 @@
 work/stylebook.md (токены, типографика, фактуры, компоненты, сетка),
 work/structure-texts.md (финальные тексты 8 секций), work/prompts.md (промпты),
 все изображения в site/assets/img/{tex,hero,paint,cards,orn,authors,meta}.
+Набор полотен (основные): hero-canvas-2 (01), feminity-figure-2 (02), optics-figure (03),
+for-whom-figure (04), circle-figure-3 (07), invite-figure (08);
+карточки 06: cat-black, pomegranate, snake-skin, thread-spindle, water-dark.
+Запасные/архив (НЕ верстать): hero-canvas, feminity-figure, circle-figure, circle-figure-2,
+fruit-ripe; warm-stone удалён.
 Работаем ТОЛЬКО в /home/pi/workspace/labfem/v6 (spec/ не трогаем, другие v<N> не читаем).
 
 ## Что сделать
@@ -22,6 +27,9 @@ work/structure-texts.md (финальные тексты 8 секций), work/p
    meta: charset, viewport, description, og:title/og:description/og:image=assets/img/meta/og-cover.webp,
    theme-color #04150d, favicon (сгенерить 32x32 из fleuron: PIL, alpha).
    Изображения: width/height атрибуты, alt по смыслу полотна, loading=lazy кроме hero.
+   Иллюстрация в каждой секции по structure-texts.md (01 hero-canvas-2; 02 feminity-figure-2;
+   03 optics-figure; 04 for-whom-figure; 06 пять карточек; 07 circle-figure-3; 08 invite-figure;
+   05 — портреты авторов). Плоды и предметы на полотнах — детали сцены, не натюрморты.
 
 3. **site/assets/css/style.css** — вся палитра и состояния токенами в :root (копировать
    блок токенов из stylebook.md §1 дословно). Реализовать:

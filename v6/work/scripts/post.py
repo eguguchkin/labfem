@@ -193,6 +193,16 @@ def portrait(src, out):
     save_webp(grain_vignette(im, vig=0.10), f'{SITE}/authors/{out}.webp')
 
 
+def inset_crop(im, frac):
+    """Обрезать светлую бумажную кайму по краям генерации."""
+    try:
+        w, h = im.size
+        dx, dy = int(w * frac), int(h * frac)
+        return safe_crop(im, (dx, dy, w - dx, h - dy))
+    except Exception as exc:
+        raise SystemExit(f'inset-кроп {frac} не удался: {exc}') from None
+
+
 def main():
     # --- тайлы текстур ---
     save_webp(velvet_tile(), f'{SITE}/tex/velvet-tile.webp')
@@ -201,13 +211,28 @@ def main():
     save_webp(seamless_tile(load('parchment-tile'), 512), f'{SITE}/tex/parchment-tile.webp')
 
     # --- картины ---
+    hero2 = inset_crop(load('hero-canvas-2'), 0.01).resize((1100, 1375), Image.LANCZOS)
+    save_webp(grain_vignette(hero2), f'{SITE}/hero/hero-canvas-2.webp')
     hero = load('hero-canvas').resize((1100, 1375), Image.LANCZOS)
     save_webp(grain_vignette(hero), f'{SITE}/hero/hero-canvas.webp')
-    pairs = [('fruit-ripe', 'paint/fruit-ripe'), ('cat-black', 'cards/cat-black'),
+    pairs = [('feminity-figure', 'paint/feminity-figure'),
+             ('feminity-figure-2', 'paint/feminity-figure-2'),
+             ('optics-figure', 'paint/optics-figure'),
+             ('for-whom-figure', 'paint/for-whom-figure'),
+             ('circle-figure', 'paint/circle-figure'),
+             ('circle-figure-2', 'paint/circle-figure-2'),
+             ('circle-figure-3', 'paint/circle-figure-3'),
+             ('invite-figure', 'paint/invite-figure'),
+             ('fruit-ripe', 'paint/fruit-ripe'), ('cat-black', 'cards/cat-black'),
              ('pomegranate', 'cards/pomegranate'), ('snake-skin', 'cards/snake-skin'),
-             ('thread-spindle', 'cards/thread-spindle'), ('warm-stone', 'cards/warm-stone')]
+             ('thread-spindle', 'cards/thread-spindle'), ('water-dark', 'cards/water-dark')]
     for name, out in pairs:
-        im = load(name).resize((800, 1000), Image.LANCZOS)
+        im = load(name)
+        if name == 'optics-figure':
+            im = inset_crop(im, 0.045)
+        if name == 'circle-figure-3':
+            im = inset_crop(im, 0.02)
+        im = im.resize((800, 1000), Image.LANCZOS)
         save_webp(grain_vignette(im), f'{SITE}/{out}.webp')
 
     # --- орнамент и символы (альфа) ---
@@ -221,8 +246,8 @@ def main():
     portrait('author-polina', 'polina')
     portrait('author-veronika', 'veronika')
 
-    # --- og-cover: кроп hero 1200x630 ---
-    og = crop_cover(load('hero-canvas'))
+    # --- og-cover: кроп hero-canvas-2 1200x630 ---
+    og = crop_cover(load('hero-canvas-2'))
     save_webp(grain_vignette(og.resize((1200, 630), Image.LANCZOS)), f'{SITE}/meta/og-cover.webp')
     print('done')
 

@@ -57,7 +57,7 @@ with faint tea stains, fiber flecks and soft mottling, matte, evenly lit scan, v
 subtle, no writing, no objects. Tileable, no seams, no vignette.`
 negative: `text, letters, drawings, dark stains, borders, torn edges, bright white`
 
-## P1 hero-canvas (size 1280x1600) → hero/hero-canvas.webp
+## P1 hero-canvas (size 1280x1600) → hero/hero-canvas.webp (запасная v1)
 prompt: `STYLE ANCHOR ... Composition: a young woman seen half-turned from behind among
 dense dark emerald foliage and ripe fruit — peaches and figs on a low branch — her bare
 shoulder and the curve of her back catching warm candlelight, loose auburn hair falling
@@ -66,12 +66,33 @@ the lower third; a thin arc of gold leaf glows along the top edge like an altarp
 vertical composition with empty dark space in the upper third for a title.`
 negative: общий + `full frontal nudity, explicit, facing camera fully, smile`
 
-## P2 fruit-ripe (size 1024x1280) → paint/fruit-ripe.webp
-prompt: `STYLE ANCHOR ... Still life: ripe peaches, a split fig and one broken pomegranate
-with ruby seeds spilling, lying on deep emerald velvet cloth in near-darkness; dew drops
-on fruit skin, one peach cut open showing wet flesh; single candlelight from the left,
-gold rim light on the fruit edges; dark background, vertical composition.`
-negative: общий + `people, hands, table setting, plate, modern objects`
+## P1b hero-canvas-2 (size 1280x1600) → hero/hero-canvas-2.webp (основная, v2)
+prompt: `STYLE ANCHOR ... Composition: a young woman half-reclining on deep emerald
+velvet drapery among dark foliage, body in a soft S-curve, one strap of her ivory linen
+shift slipped from her shoulder, head tilted back, eyes closed in quiet pleasure, loose
+auburn hair spilling over her arm; a single ripe peach resting in the hollow of her
+collarbone, her fingertips lightly touching it; warm candlelight raking across her
+shoulder and throat; deep shadow below; thin arc of gold leaf along the top edge like an
+altarpiece arch; vertical composition with dark empty space in the upper third for a
+title; sensual, tender, chaste.`
+negative: общий + `full frontal nudity, explicit, open mouth, grin`
+
+## P2 feminity-figure (size 1024x1280) → paint/feminity-figure.webp (секция 02, запасная v1)
+prompt: `STYLE ANCHOR ... Composition: a young woman seated in three-quarter view in a
+dim interior, dark emerald drapery behind, a shallow bowl of ripe peaches and figs on her
+lap; she holds one split fig open in both hands at her chest, gaze lowered to it, lips
+slightly parted; bare shoulders, loose dark hair over one shoulder; candlelight from the
+left; vertical composition.`
+negative: общий + `full frontal nudity, explicit, still life without figure`
+
+## P2b feminity-figure-2 (size 1024x1280) → paint/feminity-figure-2.webp (секция 02, основная v2)
+Та же композиция, но настроение живое и чувственное: голова поднята, взгляд на зрителя
+сквозь полуопущенные ресницы, полуулыбка, румянец, растрёпанные волосы; плод — подношение,
+не предмет изучения; поза languid, плечи развёрнуты; свечной свет теплее, блик на губах
+и ключице.
+negative: общий + `frown, concentration, eating, biting, staring at fruit, grimace,
+still life without figure, full frontal nudity, explicit`
+(старый натюрморт fruit-ripe остаётся только как архивный ассет, на сайте не используется)
 
 ## P3 cat-black (size 1024x1280) → cards/cat-black.webp
 prompt: `STYLE ANCHOR ... A majestic black cat, black as night, with amber eyes, seated
@@ -100,12 +121,69 @@ slipped from the shoulder; dark emerald velvet background; candlelight; vertical
 composition, no face.`
 negative: общий + `face, modern tools, scissors, bright colors`
 
-## P7 warm-stone (size 1024x1280) → cards/warm-stone.webp
-prompt: `STYLE ANCHOR ... Two open palms resting on a large warm river stone, clay smudges
-on the fingers, a fold of raw linen beneath; the stone glows faintly with inner warmth;
-deep emerald darkness around; candlelight low from the side; vertical composition,
-no face.`
-negative: общий + `face, jewelry, modern manicure, bright background`
+## P7 water-dark (size 1024x1280) → cards/water-dark.webp (карточка 5, вместо «тёплого камня»)
+prompt: `STYLE ANCHOR ... Composition: a young woman kneeling at the edge of dark still
+water at night, her whole figure reflected beneath her, one hand touching the surface
+making thin rings; water lilies and a pale bud nearby; moonless warm light from a hidden
+candle on the bank lighting her profile and shoulder; deep emerald and black palette;
+vertical composition.`
+negative: общий + `daylight, blue water, modern swimwear, full frontal nudity`
+
+## P8 optics-figure (size 1024x1280) → paint/optics-figure.webp (секция 03)
+prompt: `STYLE ANCHOR ... Composition: head and shoulders of a young woman in half-turn
+holding an oval gilded hand mirror at her chest, the mirror glass turned slightly away
+catching a warm glow instead of a face; her eyes lowered toward it, dark hair loosely
+braided with a gold thread; deep emerald darkness around; candlelight; vertical
+composition.`
+negative: общий + `face inside mirror, double face, full frontal nudity`
+Пост: inset-кроп 4.5% — генерация даёт светлую бумажную кайму по краям.
+
+## P9 for-whom-figure (size 1024x1280) → paint/for-whom-figure.webp (секция 04)
+prompt: `STYLE ANCHOR ... Composition: a young woman head and shoulders, eyes closed,
+face calm and open, holding a pale porcelain mask lowered in one hand at her side, the
+mask ribbons slipping through her fingers; bare shoulder, loose hair; a single warm shaft
+of light on her face; deep emerald darkness; vertical composition.`
+negative: общий + `mask on face, theatre crowd, full frontal nudity`
+
+## P10 circle-figure (size 1024x1280) → paint/circle-figure.webp (секция 07, запасная v1)
+prompt: `STYLE ANCHOR ... Composition: seen over the bare shoulder and head of a young
+woman in the foreground, a small circle of women seated on low stools around a low wooden
+table with candles and a clay bowl, all in deep shadow, warm candlelight on their faces
+and hands; the foreground woman's loose hair and shoulder catch the light; intimate,
+quiet; vertical composition.`
+negative: общий + `modern room, electric light, full frontal nudity`
+
+## P10b circle-figure-2 (size 1024x1280) → paint/circle-figure-2.webp (секция 07, запасная v2)
+Круг из пяти женщин вокруг низкого стола со свечами, вид спереди через стол: все в фас
+или три четверти спереди, ни одной спиной; каждая явно отличается — возраст, лицо,
+волосы (рыжая распущенная, тёмная коса, седые пряди, короткие кудри, светлый платок);
+позы и жесты разные: наклон вперёд на локтях, тихий смех с поднятой рукой, слушает с
+наклонённой головой и сложенными ладонями, наливает из кувшинчика, подбородок на ладони;
+свет свечей из центра стола на лицах.
+negative: общий + `identical faces, twins, clones, mirrored poses, back turned, nape,
+modern room, electric light, full frontal nudity`
+
+## P10c circle-figure-3 (size 1024x1280) → paint/circle-figure-3.webp (секция 07, основная v3)
+Круг из пяти МОЛОДЫХ женщин (20–35) вокруг низкого стола со свечами, вид спереди через
+стол: все в фас или три четверти спереди; каждая явно отличается волосами и лицом;
+одеты только в лёгкие полупрозрачные льняные драпировки цвета слоновой кости,
+соскальзывающие с плеч: открытые плечи, ключицы, руки в свечном свете, ткань мягко
+облегает; нагота — в мере классической академической живописи, целомудренно;
+настроение живое и возбуждённое: тихий смех, разрумяненные лица, яркие глаза, жесты
+(поднятая рука, наливает из кувшинчика, подбородок на ладони); свет свечей из центра
+стола на лицах, плечах и руках; изумрудная тьма позади.
+negative: общий + `elderly woman, old face, gray hair, heavy clothing, fully clothed,
+high collar, identical faces, twins, clones, mirrored poses, back turned, nape,
+modern room, electric light, explicit nudity, exposed breasts, nipples`
+Пост: inset-кроп 2% — тонкая бумажная кайма по краям генерации.
+
+## P11 invite-figure (size 1024x1280) → paint/invite-figure.webp (секция 08)
+prompt: `STYLE ANCHOR ... Composition: a young woman at a tall arched doorway drawing
+aside a heavy emerald velvet curtain with one hand, warm golden light from beyond
+spilling over her bare shoulder and cheek, her face turned to the viewer with a faint
+half-smile and lowered lashes; a folded letter with a wax seal in her other hand at her
+waist; vertical composition.`
+negative: общий + `modern door, electric light, full frontal nudity`
 
 ## O1 fleuron (size 512x512) → orn/fleuron.webp (альфа)
 prompt: `A single small ornamental fleuron motif of antique gilded bronze: symmetrical
@@ -124,4 +202,4 @@ Old-master gilded relief style, delicate, small.`
 negative: `text, frame, photo, bright background, multiple objects`
 
 ## M1 og-cover (не генерировать)
-Кроп P1 по центру 1200x630 + тонировка --velvet-deep по краям; текст не накладывается.
+Кроп P1b (hero-canvas-2) по центру 1200x630 + тонировка --velvet-deep по краям; текст не накладывается.

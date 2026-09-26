@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
-import json, base64, time, sys, os, urllib.request
+import json, base64, http.client, time, sys, os, urllib.parse
 
 SETTINGS = os.path.expanduser('~/.pi/agent/pi-image-gen/settings.json')
-KEY = json.load(open(SETTINGS))['customProviders']['selectel']['apiKey']
+try:
+    with open(SETTINGS, encoding='utf-8') as fh:
+        KEY = json.load(fh)['customProviders']['selectel']['apiKey']
+except (OSError, KeyError, ValueError) as exc:
+    raise SystemExit(f'не удалось прочитать ключ Selectel из {SETTINGS}: {exc}') from None
 URL = 'https://api.selectel.ru/aig/v1/images/generations'
-OUT = '/tmp/lab6/raw'
-os.makedirs(OUT, exist_ok=True)
+OUT = '/home/pi/workspace/labfem/v6/work/img-raw'
+try:
+    os.makedirs(OUT, exist_ok=True)
+except OSError as exc:
+    raise SystemExit(f'не удалось создать каталог {OUT}: {exc}') from None
 
 STYLE = ("STYLE ANCHOR: oil painting on canvas in the manner of 19th-century academic "
          "realism and Pre-Raphaelites (Bouguereau, Waterhouse), deep chiaroscuro, "
@@ -85,6 +92,100 @@ TASKS = {
    "fingers, a fold of raw linen beneath; the stone glows faintly with inner warmth; deep "
    "emerald darkness around; candlelight low from the side; vertical composition, no face.",
    NEG_PAINT + ", face, jewelry, modern manicure, bright background"),
+ "hero-canvas-2": (1280, 1600,
+   STYLE + "Composition: a young woman half-reclining on deep emerald velvet drapery "
+   "among dark foliage, body in a soft S-curve, one strap of her ivory linen shift "
+   "slipped from her shoulder, head tilted back, eyes closed in quiet pleasure, loose "
+   "auburn hair spilling over her arm; a single ripe peach resting in the hollow of her "
+   "collarbone, her fingertips lightly touching it; warm candlelight raking across her "
+   "shoulder and throat; deep shadow below; thin arc of gold leaf along the top edge "
+   "like an altarpiece arch; vertical composition with dark empty space in the upper "
+   "third for a title; sensual, tender, chaste.",
+   NEG_PAINT + ", full frontal nudity, explicit, open mouth, grin"),
+ "feminity-figure": (1024, 1280,
+   STYLE + "Composition: a young woman seated in three-quarter view in a dim interior, "
+   "dark emerald drapery behind, a shallow bowl of ripe peaches and figs on her lap; she "
+   "holds one split fig open in both hands at her chest, gaze lowered to it, lips "
+   "slightly parted; bare shoulders, loose dark hair over one shoulder; candlelight "
+   "from the left; vertical composition.",
+   NEG_PAINT + ", full frontal nudity, explicit, still life without figure"),
+ "optics-figure": (1024, 1280,
+   STYLE + "Composition: head and shoulders of a young woman in half-turn holding an "
+   "oval gilded hand mirror at her chest, the mirror glass turned slightly away catching "
+   "a warm glow instead of a face; her eyes lowered toward it, dark hair loosely braided "
+   "with a gold thread; deep emerald darkness around; candlelight; vertical composition.",
+   NEG_PAINT + ", face inside mirror, double face, full frontal nudity"),
+ "for-whom-figure": (1024, 1280,
+   STYLE + "Composition: a young woman head and shoulders, eyes closed, face calm and "
+   "open, holding a pale porcelain mask lowered in one hand at her side, the mask "
+   "ribbons slipping through her fingers; bare shoulder, loose hair; a single warm shaft "
+   "of light on her face; deep emerald darkness; vertical composition.",
+   NEG_PAINT + ", mask on face, theatre crowd, full frontal nudity"),
+ "feminity-figure-2": (1024, 1280,
+   STYLE + "Composition: same scene - a young woman seated in three-quarter view in a "
+   "dim interior, dark emerald drapery behind, a shallow bowl of ripe peaches and figs "
+   "on her lap, one split fig held loosely in one hand at her chest; but her mood is "
+   "alive and sensual: head lifted, chin raised, gaze meeting the viewer through "
+   "half-lidded lashes, lips parted in a faint knowing half-smile, a warm flush on her "
+   "cheeks and chest, hair slightly tousled as if she just turned; the fig is an "
+   "offering, not a study - juice glistening, her other hand resting open on her thigh; "
+   "posture languid and open, shoulders back; candlelight from the left warmer, catching "
+   "the moisture of her lips and the hollow of her throat; vertical composition.",
+   NEG_PAINT + ", frown, concentration, eating, biting, staring at fruit, grimace, "
+   "still life without figure, full frontal nudity, explicit"),
+ "circle-figure-3": (1024, 1280,
+   STYLE + "Composition: a circle of five young women seated on low stools and cushions "
+   "around a low wooden table with candles and a clay bowl, viewed from the front across "
+   "the table; every woman faces the viewer (en face or three-quarter front), no one seen "
+   "from behind; all young (twenties to thirties) and clearly distinct from one another - "
+   "loose auburn hair, a dark braid over the shoulder, short black curls, honey-blonde "
+   "waves, chestnut hair loosely pinned; each wearing only light semi-transparent ivory "
+   "linen drapery slipping off the shoulders, bare shoulders, collarbones and arms "
+   "glowing in candlelight, the thin fabric clinging softly and leaving much skin to the "
+   "warm light, tasteful and chaste in the manner of classical academic painting; mood "
+   "alive, warm and excited: soft laughter, flushed glowing faces, bright eyes, leaning "
+   "toward one another, one raising a hand mid-gesture, one pouring from a small jug, "
+   "one resting her chin on her palm; warm candlelight from the table center on faces, "
+   "shoulders and hands; deep emerald darkness behind; intimate, sensual, joyful; "
+   "vertical composition.",
+   NEG_PAINT + ", elderly woman, old face, gray hair, heavy clothing, fully clothed, "
+   "high collar, identical faces, twins, clones, mirrored poses, back turned, nape, "
+   "modern room, electric light, explicit nudity, exposed breasts, nipples"),
+ "circle-figure-2": (1024, 1280,
+   STYLE + "Composition: a small circle of five women seated on low stools around a low "
+   "wooden table with candles and a clay bowl, viewed from the front across the table: "
+   "every woman faces the viewer (en face or three-quarter front), no one seen from "
+   "behind; each clearly distinct - different age, face, hair: a young woman with loose "
+   "auburn hair, a woman with a dark braid over her shoulder, an older woman with "
+   "grey-streaked hair pulled back, a woman with short curly black hair, a woman with a "
+   "pale headscarf; varied natural poses and gestures: one leaning forward with elbows "
+   "on knees, one laughing softly with hand raised, one listening with tilted head and "
+   "folded hands, one pouring from a small jug, one resting her chin on her palm; warm "
+   "candlelight from the table center glowing on their faces and hands; deep emerald "
+   "darkness behind; intimate, quiet, alive; vertical composition.",
+   NEG_PAINT + ", identical faces, twins, clones, mirrored poses, back turned, nape, "
+   "modern room, electric light, full frontal nudity"),
+ "circle-figure": (1024, 1280,
+   STYLE + "Composition: seen over the bare shoulder and head of a young woman in the "
+   "foreground, a small circle of women seated on low stools around a low wooden table "
+   "with candles and a clay bowl, all in deep shadow, warm candlelight on their faces "
+   "and hands; the foreground woman's loose hair and shoulder catch the light; intimate, "
+   "quiet; vertical composition.",
+   NEG_PAINT + ", modern room, electric light, full frontal nudity"),
+ "invite-figure": (1024, 1280,
+   STYLE + "Composition: a young woman at a tall arched doorway drawing aside a heavy "
+   "emerald velvet curtain with one hand, warm golden light from beyond spilling over "
+   "her bare shoulder and cheek, her face turned to the viewer with a faint half-smile "
+   "and lowered lashes; a folded letter with a wax seal in her other hand at her waist; "
+   "vertical composition.",
+   NEG_PAINT + ", modern door, electric light, full frontal nudity"),
+ "water-dark": (1024, 1280,
+   STYLE + "Composition: a young woman kneeling at the edge of dark still water at "
+   "night, her whole figure reflected beneath her, one hand touching the surface making "
+   "thin rings; water lilies and a pale bud nearby; moonless warm light from a hidden "
+   "candle on the bank lighting her profile and shoulder; deep emerald and black "
+   "palette; vertical composition.",
+   NEG_PAINT + ", daylight, blue water, modern swimwear, full frontal nudity"),
  "fleuron": (512, 512,
    "A single small ornamental fleuron motif of antique gilded bronze: symmetrical "
    "leaf-and-bud flourish, burnished gold (#c8a24a) with dark patina in recesses, centered "
@@ -113,18 +214,31 @@ TASKS = {
    "text, frame, photo, bright background, multiple objects"),
 }
 
+def https_post_json(url, body, headers, timeout=180):
+    """POST по явному HTTPS-соединению (схема гарантирована типом соединения)."""
+    parts = urllib.parse.urlsplit(url)
+    if parts.scheme != 'https':
+        raise SystemExit(f'небезопасная схема URL: {url}')
+    conn = http.client.HTTPSConnection(parts.hostname, parts.port or 443, timeout=timeout)
+    try:
+        conn.request('POST', parts.path or '/', body=body, headers=headers)
+        with conn.getresponse() as resp:
+            return json.load(resp)
+    finally:
+        conn.close()
+
+
 def gen(name, size, prompt, neg):
     body = json.dumps({"model": "qwen/qwen-image-3", "prompt": prompt,
                        "negative_prompt": neg, "size": f"{size[0]}x{size[1]}"}).encode()
     for attempt in range(1, 7):
         try:
-            req = urllib.request.Request(URL, data=body, headers={
+            data = https_post_json(URL, body, {
                 'Content-Type': 'application/json',
                 'Authorization': f'Bearer {KEY}'})
-            with urllib.request.urlopen(req, timeout=180) as r:
-                data = json.load(r)
             b64 = data['data'][0]['b64_json']
-            open(f'{OUT}/{name}.png', 'wb').write(base64.b64decode(b64))
+            with open(f'{OUT}/{name}.png', 'wb') as fh:
+                fh.write(base64.b64decode(b64))
             print(f'OK {name}', flush=True)
             return True
         except Exception as e:
