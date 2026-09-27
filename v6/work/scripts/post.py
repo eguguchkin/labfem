@@ -278,9 +278,58 @@ def main():
     save_webp(grain_vignette(land), f'{SITE}/hero/hero-full-land.webp')
     port = hf.crop((552, 0, 1704, 2048))  # голова по центру (50%), целиком над текстом
     save_webp(grain_vignette(port), f'{SITE}/hero/hero-full-port.webp')
-    pairs = [('v7-feminity-1', 'paint/feminity-figure-2'),
-             ('v7-optics-2', 'paint/optics-figure'),
-             ('v7-forwhom-2', 'paint/for-whom-figure'),
+    # --- feminity-figure-2: внешний референс (v8-neck), кроп 4:5 + изумрудный сплит-тон ---
+    neck = load('v8-neck').convert('RGB').crop((8, 57, 862, 1125))
+    na = np.asarray(neck).astype(np.float32)
+    lum = na.mean(axis=2, keepdims=True) / 255.0
+    shadow = np.clip((0.45 - lum) / 0.45, 0, 1)  # мягкая маска теней
+    na[..., 0] -= 10 * shadow[..., 0]
+    na[..., 1] += 14 * shadow[..., 0]
+    na[..., 2] += 8 * shadow[..., 0]
+    na = np.clip(na * 1.03, 0, 255)  # лёгкий контраст
+    neck = Image.fromarray(na.astype(np.uint8)).resize((800, 1000), Image.LANCZOS)
+    save_webp(grain_vignette(neck), f'{SITE}/paint/feminity-figure-2.webp')
+
+    # --- optics-figure: внешний референс (v8-face, девушка с птицей), кроп 4:5 + изумруд ---
+    face = load('v8-face').convert('RGB').crop((170, 50, 1005, 1094))
+    fa = np.asarray(face).astype(np.float32)
+    lum = fa.mean(axis=2, keepdims=True) / 255.0
+    shadow = np.clip((0.45 - lum) / 0.45, 0, 1)
+    fa[..., 0] -= 10 * shadow[..., 0]
+    fa[..., 1] += 14 * shadow[..., 0]
+    fa[..., 2] += 8 * shadow[..., 0]
+    fa = np.clip(fa * 1.03, 0, 255)
+    face = Image.fromarray(fa.astype(np.uint8)).resize((800, 1000), Image.LANCZOS)
+    save_webp(grain_vignette(face), f'{SITE}/paint/optics-figure.webp')
+
+    # --- for-whom-figure: внешний референс (v8-pearls, жемчужный каскад) ---
+    pearls = load('v8-pearls').convert('RGB')
+    pa = np.asarray(pearls).astype(np.float32)
+    rng = np.random.default_rng(7)
+    def patch(x0, y0, x1, y1, lx0, lx1, rx0, rx1):
+        left = pa[y0:y1, lx0:lx1].mean(axis=1)      # (h,3) на строку
+        right = pa[y0:y1, rx0:rx1].mean(axis=1)
+        w = x1 - x0
+        t = (np.arange(w) / (w - 1))[None, :, None]
+        grad = left[:, None, :] * (1 - t) + right[:, None, :] * t
+        grad += rng.normal(0, 2.0, grad.shape)
+        pa[y0:y1, x0:x1] = np.clip(grad, 0, 255)
+    patch(18, 108, 135, 268, 5, 16, 140, 151)       # крестик
+    patch(788, 108, 918, 262, 774, 786, 920, 929)   # точки
+    patch(0, 0, 56, 136, 60, 76, 60, 76)            # дуга скругления слева
+    patch(872, 0, 930, 136, 854, 868, 854, 868)     # дуга скругления справа
+    pearls = Image.fromarray(pa.astype(np.uint8)).crop((8, 103, 922, 1245))
+    qa = np.asarray(pearls).astype(np.float32)
+    lum = qa.mean(axis=2, keepdims=True) / 255.0
+    shadow = np.clip((0.45 - lum) / 0.45, 0, 1)
+    qa[..., 0] -= 10 * shadow[..., 0]
+    qa[..., 1] += 14 * shadow[..., 0]
+    qa[..., 2] += 8 * shadow[..., 0]
+    qa = np.clip(qa * 1.03, 0, 255)
+    pearls = Image.fromarray(qa.astype(np.uint8)).resize((800, 1000), Image.LANCZOS)
+    save_webp(grain_vignette(pearls), f'{SITE}/paint/for-whom-figure.webp')
+
+    pairs = [
              ('v7-circle-1', 'paint/circle-figure-3'),
              ('v7-invite-1', 'paint/invite-figure'),
              ('v7-cat-2', 'cards/cat-black'),
