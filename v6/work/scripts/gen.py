@@ -50,6 +50,17 @@ TASKS = {
    "faint tea stains, fiber flecks and soft mottling, matte, evenly lit scan, very "
    "subtle, no writing, no objects. Tileable, no seams, no vignette.",
    "text, letters, drawings, dark stains, borders, torn edges, bright white"),
+ "hero-full": (2048, 2048,
+   STYLE + "Square composition designed for both wide and tall crops. Vertical zones: "
+   "top sixth - dark emerald foliage, velvet drapery and a single candle glow at the "
+   "left edge; middle - a young woman half-reclining among deep green velvet folds, "
+   "head and face centered around one third of the height, eyes half-lidded toward the "
+   "viewer, loose auburn hair, bare shoulders and collarbone catching warm candlelight, "
+   "thin ivory linen slipping from one arm, a ripe peach resting near her hand; lower "
+   "third - calm near-empty deep shadow of velvet folds, almost no detail, reserved as "
+   "quiet dark space; sides - extendable dark foliage and drapery, no important detail "
+   "near edges. Sensual, tender, chaste, museum quality.",
+   NEG_PAINT + ", full frontal nudity, explicit, bright details in lower third, cluttered edges, centered symmetrical pose"),
  "hero-canvas": (1280, 1600,
    STYLE + "Composition: a young woman seen half-turned from behind among dense dark "
    "emerald foliage and ripe fruit - peaches and figs on a low branch - her bare shoulder "

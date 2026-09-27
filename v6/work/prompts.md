@@ -66,7 +66,26 @@ the lower third; a thin arc of gold leaf glows along the top edge like an altarp
 vertical composition with empty dark space in the upper third for a title.`
 negative: общий + `full frontal nudity, explicit, facing camera fully, smile`
 
-## P1b hero-canvas-2 (size 1280x1600) → hero/hero-canvas-2.webp (основная, v2)
+## P1c hero-full (size 2048x2048) → hero/hero-full-{land,port}.webp (полноэкранный hero)
+
+Квадратный оригинал с «безопасным центром» под два кропа (desktop 16:9 полоса
+y 420–1572, mobile 9:16 колонка x 448–1600): лицо и жест в верхней трети, нижняя
+треть — спокойная тьма бархата под текст, края — растяжимая листва/драпировка.
+prompt: `STYLE ANCHOR ... Square composition designed for both wide and tall crops.
+Vertical zones: top sixth - dark emerald foliage, velvet drapery and a single candle
+glow at the left edge; middle - a young woman half-reclining among deep green velvet
+folds, head and face centered around one third of the height, eyes half-lidded toward
+the viewer, loose auburn hair, bare shoulders and collarbone catching warm candlelight,
+thin ivory linen slipping from one arm, a ripe peach resting near her hand; lower
+third - calm near-empty deep shadow of velvet folds, almost no detail, reserved as
+quiet dark space; sides - extendable dark foliage and drapery, no important detail
+near edges. Sensual, tender, chaste, museum quality.`
+negative: `NEG_PAINT + full frontal nudity, explicit, bright details in lower third,
+cluttered edges, centered symmetrical pose`
+Постобработка (post.py): два кропа одного оригинала + grain_vignette; артефакты
+hero-full-land.webp (2048x1152) и hero-full-port.webp (1152x2048).
+
+## P1b hero-canvas-2 (size 1280x1600) → hero/hero-canvas-2.webp (антракт между 06 и 07)
 prompt: `STYLE ANCHOR ... Composition: a young woman half-reclining on deep emerald
 velvet drapery among dark foliage, body in a soft S-curve, one strap of her ivory linen
 shift slipped from her shoulder, head tilted back, eyes closed in quiet pleasure, loose

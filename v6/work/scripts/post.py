@@ -270,6 +270,12 @@ def main():
     # --- картины ---
     hero2 = inset_crop(load('hero-canvas-2'), 0.01).resize((1100, 1375), Image.LANCZOS)
     save_webp(grain_vignette(hero2), f'{SITE}/hero/hero-canvas-2.webp')
+    # полноэкранное полотно: два кропа одного оригинала (desktop 16:9, mobile 9:16)
+    hf = load('hero-full')
+    land = hf.crop((0, 420, 2048, 1572))
+    save_webp(grain_vignette(land), f'{SITE}/hero/hero-full-land.webp')
+    port = hf.crop((448, 0, 1600, 2048))
+    save_webp(grain_vignette(port), f'{SITE}/hero/hero-full-port.webp')
     hero = load('hero-canvas').resize((1100, 1375), Image.LANCZOS)
     save_webp(grain_vignette(hero), f'{SITE}/hero/hero-canvas.webp')
     pairs = [('feminity-figure', 'paint/feminity-figure'),

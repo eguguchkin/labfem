@@ -28,20 +28,21 @@
 
 <!-- 01 — ЛАБОРАТОРИЯ ФЕМИННОСТИ -->
 <header class="hero" id="lab">
-  <div class="container hero-grid">
-    <div class="hero-text">
-      <p class="label"><span class="num">01</span> — Лаборатория</p>
-      <h1>Лаборатория <em>Феминности</em></h1>
-      <p class="hero-sub">междисциплинарное исследование женского опыта —<br>
-        глубинная психология · искусство · миф</p>
-      <p class="hero-essence">Феминность не существует в единственном числе.<br>
-        Она складывается из образов, ролей, противоречий и личных историй.</p>
-      <a class="btn" href="#feminity">войти</a>
-    </div>
-    <figure class="hero-canvas arch">
-      <img src="assets/img/hero/hero-canvas-2.webp" width="1100" height="1375"
-           alt="Женщина полулёжа на изумрудном бархате, персик в ямочке ключицы, свечной свет по плечу и горлу">
-    </figure>
+  <picture class="hero-bg">
+    <source media="(orientation: portrait)" type="image/webp"
+            srcset="assets/img/hero/hero-full-port.webp">
+    <img src="assets/img/hero/hero-full-land.webp" width="2048" height="1152" fetchpriority="high"
+         alt="Женщина полулёжа среди изумрудного бархата и листвы, свечной свет по плечу и горлу, персик у ладони — полотно во весь экран">
+  </picture>
+  <div class="hero-scrim" aria-hidden="true"></div>
+  <div class="container hero-copy">
+    <p class="label"><span class="num">01</span> — Лаборатория</p>
+    <h1>Лаборатория <em>Феминности</em></h1>
+    <p class="hero-sub">междисциплинарное исследование женского опыта —<br>
+      глубинная психология · искусство · миф</p>
+    <p class="hero-essence">Феминность не существует в единственном числе.<br>
+      Она складывается из образов, ролей, противоречий и личных историй.</p>
+    <a class="btn" href="#feminity">войти</a>
   </div>
   <div class="hero-thread" aria-hidden="true">
     <img src="assets/img/orn/fleuron.webp" width="28" height="28" alt="">
@@ -234,6 +235,13 @@
     </div>
   </div>
   <div class="divider" aria-hidden="true"><img src="assets/img/orn/fleuron.webp" width="32" height="32" alt=""></div>
+</section>
+
+<!-- АНТРАКТ: полноэкранное полотно с цитатой -->
+<section class="interlude" aria-label="антракт">
+  <img class="interlude-bg" src="assets/img/hero/hero-canvas-2.webp" width="1100" height="1375" loading="lazy"
+       alt="Возлежащая в соскользнувшей сорочке, персик в ямочке ключицы — полотно-антракт">
+  <p class="interlude-quote">входи медленно — здесь картины дышат</p>
 </section>
 
 <!-- 07 — КАК ЭТО ПРОИСХОДИТ -->

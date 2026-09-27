@@ -60,6 +60,14 @@ executablePath chromium_headless_shell-1243, LD_LIBRARY_PATH=/home/pi/chrome-sys
    с page.hover и без.
 9. **Мета.** og:title/description/image, theme-color #020d07, favicon 32 — присутствуют и отдают 200.
 
+9a. **Hero и антракт (ревизия).** Hero 01: полотно во весь вьюпорт без рамки
+   (picture: hero-full-land 2048x1152 / hero-full-port 1152x2048 по orientation),
+   текст по центру нижней трети поверх scrim; проверить на 1440x900, 820x1180, 390x844:
+   лицо не перекрыто текстом, контраст текста над scrim ≥ 4.5:1 (замер по пикселям),
+   object-position не срезает лицо ни в одной ориентации. Антракт между 06 и 07:
+   hero-canvas-2 во всю ширину 92svh, цитата читаема над нижним scrim.
+   Багет/рамка впервые появляются только в 02 — проверить, что у hero и антракта рамок нет.
+
 ## Исправления
 Найденное чинить сразу в site/assets/css/style.css (или index.html), переснимать затронутые
 кадры в work/shots2/ (перезаписать), вести список «найдено → исправлено».
