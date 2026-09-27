@@ -76,7 +76,9 @@ html{
 /* слой 2: бархат под контентом (ловушка v5: фон body не ставить) */
 html::before{
   content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
-  background:url('../img/tex/velvet-tile.webp') repeat;background-size:1024px 1024px;
+  /* затемнение бархата на 20%: первый слой — чёрная вуаль поверх плитки */
+  background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),
+    url('../img/tex/velvet-tile.webp') repeat;background-size:1024px 1024px;
 }
 /* слой 4: виньетка «зала» поверх вьюпорта (fixed — без стыков между секциями);
    кракелюр живёт только на полотнах, см. .arch::before/.frame::before */
@@ -200,21 +202,30 @@ a:hover{color:var(--gold-bright);}
 }
 .hero-bg{position:absolute;inset:0;z-index:0;}
 .hero-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 0%;}
+/* кракелюр на полотне hero (как на картинах в рамках) */
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:url('../img/tex/crackle-tile.webp') repeat;background-size:260px 260px;
+  mix-blend-mode:soft-light;opacity:.75;
+}
 .hero-scrim{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to top,
     var(--velvet-deep) 0%,
-    rgba(2,13,7,.9) 26%,
-    rgba(2,13,7,.74) 48%,
-    rgba(2,13,7,.3) 66%,
-    transparent 80%);
+    rgba(2,13,7,.9) 24%,
+    rgba(2,13,7,.78) 38%,
+    rgba(2,13,7,.5) 50%,
+    rgba(2,13,7,.26) 60%,
+    rgba(2,13,7,.1) 70%,
+    rgba(2,13,7,.02) 80%,
+    transparent 88%);
 }
 .hero-copy{position:relative;z-index:2;text-align:center;}
-.hero-copy .label{margin-bottom:1em;text-shadow:0 1px 12px rgba(2,13,7,.95);}
-.hero-copy h1{margin:0 0 .35em;text-shadow:0 2px 34px rgba(2,13,7,.95),0 0 8px rgba(2,13,7,.6);}
+.hero-copy .label{margin-bottom:1em;text-shadow:0 1px 2px rgba(2,13,7,.95),0 2px 14px rgba(2,13,7,.9),0 4px 34px rgba(2,13,7,.8);}
+.hero-copy h1{margin:0 0 .35em;text-shadow:0 2px 4px rgba(2,13,7,.92),0 4px 22px rgba(2,13,7,.88),0 6px 48px rgba(2,13,7,.75);}
 .hero-sub{font-style:italic;font-size:24px;color:var(--ivory);margin:0 0 1.2em;
   text-shadow:0 1px 18px rgba(2,13,7,.9);}
-.hero-essence{font-size:21px;color:var(--ivory-dim);margin:0 auto 2.2em;max-width:46ch;
+.hero-essence{font-size:21px;color:var(--ivory-dim);margin:0 auto .8em;max-width:46ch;
   text-shadow:0 1px 14px rgba(2,13,7,.9);}
 .hero-thread{
   position:absolute;left:50%;bottom:2svh;transform:translateX(-50%);z-index:2;
@@ -223,24 +234,24 @@ a:hover{color:var(--gold-bright);}
 .hero-thread img{width:28px;height:28px;opacity:.85;}
 .thread-line{width:1px;height:56px;background:linear-gradient(var(--gold-dim),transparent);}
 
-/* ---------- антракт: полноэкранное полотно с цитатой ---------- */
+/* антракт: полноэкранное полотно без текста; кракелюр + мягкий низ */
 .interlude{
   position:relative;min-height:92svh;overflow:hidden;
-  display:flex;align-items:flex-end;justify-content:center;padding:0 0 10svh;
 }
 .interlude-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;}
-.interlude::after{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 88% 58% at 50% 106%,rgba(2,13,7,.9),rgba(2,13,7,.5) 55%,transparent 78%);
+.interlude::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:url('../img/tex/crackle-tile.webp') repeat;background-size:260px 260px;
+  mix-blend-mode:soft-light;opacity:.75;
 }
-.interlude-quote{
-  position:relative;z-index:2;margin:0;text-align:center;
-  font-family:'Cormorant',Georgia,serif;font-style:italic;font-size:clamp(26px,3.4vw,44px);
-  color:var(--ivory);text-shadow:0 2px 26px rgba(2,13,7,.9);
+.interlude::after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse 88% 58% at 50% 106%,rgba(2,13,7,.9),rgba(2,13,7,.5) 55%,transparent 78%);
 }
 
 /* ---------- панели-секции ---------- */
 .panel{position:relative;padding:14svh 0 0;}
+#meetings{padding-bottom:10svh;} /* дыхание между карточками 06 и антрактом */
 #invite{padding-bottom:14svh;}
 .pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;}
 .pair-canvas{margin:0;max-width:540px;width:100%;}

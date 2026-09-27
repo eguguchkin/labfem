@@ -8,7 +8,7 @@
 import os
 
 import numpy as np  # type: ignore[import-not-found]
-from PIL import Image, ImageFilter  # type: ignore[import-not-found]
+from PIL import Image, ImageFilter, ImageEnhance  # type: ignore[import-not-found]
 
 RAW = '/home/pi/workspace/labfem/v6/work/img-raw'
 SITE = '/home/pi/workspace/labfem/v6/site/assets/img'
@@ -268,11 +268,15 @@ def main():
     save_webp(seamless_tile(load('parchment-tile'), 512), f'{SITE}/tex/parchment-tile.webp')
 
     # --- картины ---
-    hero2 = inset_crop(load('hero-canvas-2'), 0.01).resize((1100, 1375), Image.LANCZOS)
+    # антракт: i2i-версия без арки, 1280x1600 → 1460x1825 (браузер не растягивает),
+    # чёткость и контраст возвращаем маской резкости (i2i мылит)
+    hero2 = inset_crop(load('hero-canvas-2-noarch'), 0.01).resize((1460, 1825), Image.LANCZOS)
+    hero2 = hero2.filter(ImageFilter.UnsharpMask(radius=2.2, percent=75, threshold=2))
+    hero2 = ImageEnhance.Contrast(hero2).enhance(1.08)
     save_webp(grain_vignette(hero2), f'{SITE}/hero/hero-canvas-2.webp')
     # полноэкранное полотно: два кропа одного оригинала (desktop 16:9, mobile 9:16)
     hf = load('hero-full')
-    land = hf.crop((0, 420, 2048, 1572))
+    land = hf.crop((0, 280, 2048, 1432))  # голова с запасом ~120px (без обреза макушки)
     save_webp(grain_vignette(land), f'{SITE}/hero/hero-full-land.webp')
     port = hf.crop((448, 0, 1600, 2048))
     save_webp(grain_vignette(port), f'{SITE}/hero/hero-full-port.webp')
@@ -310,7 +314,7 @@ def main():
     portrait('author-veronika', 'veronika')
 
     # --- og-cover: кроп hero-canvas-2 1200x630 ---
-    og = crop_cover(load('hero-canvas-2'))
+    og = crop_cover(load('hero-canvas-2-noarch'))
     save_webp(grain_vignette(og.resize((1200, 630), Image.LANCZOS)), f'{SITE}/meta/og-cover.webp')
     print('done')
 

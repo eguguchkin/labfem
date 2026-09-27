@@ -86,6 +86,10 @@ cluttered edges, centered symmetrical pose`
 hero-full-land.webp (2048x1152) и hero-full-port.webp (1152x2048).
 
 ## P1b hero-canvas-2 (size 1280x1600) → hero/hero-canvas-2.webp (антракт между 06 и 07)
+Аркa убрана i2i-правкой (антракт теперь без рамки и без текста): оригинал
+`img-raw/hero-canvas-2.png` → `img-raw/hero-canvas-2-noarch.png` (qwen-image-3,
+референс + промпт «удали золотую линию арки и тёмную арочную нишу, заполни
+фоном листва/бархат, фигуру не меняй»); post.py берёт -noarch.
 prompt: `STYLE ANCHOR ... Composition: a young woman half-reclining on deep emerald
 velvet drapery among dark foliage, body in a soft S-curve, one strap of her ivory linen
 shift slipped from her shoulder, head tilted back, eyes closed in quiet pleasure, loose
