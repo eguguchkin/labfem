@@ -380,12 +380,14 @@ a:hover{color:var(--gold-bright);}
   .hero-scrim{
     background:linear-gradient(to top,
       var(--velvet-deep) 0%,
-      rgba(2,13,7,.94) 26%,
-      rgba(2,13,7,.88) 40%,
-      rgba(2,13,7,.7) 55%,
-      rgba(2,13,7,.4) 70%,
-      rgba(2,13,7,.12) 85%,
-      transparent 96%);
+      rgba(2,13,7,.93) 20%,
+      rgba(2,13,7,.88) 34%,
+      rgba(2,13,7,.68) 46%,
+      rgba(2,13,7,.5) 56%,
+      rgba(2,13,7,.28) 64%,
+      rgba(2,13,7,.12) 72%,
+      rgba(2,13,7,.03) 80%,
+      transparent 88%);
   }
   .hero-sub{font-size:18px;}
   .hero-essence{font-size:17px;}
