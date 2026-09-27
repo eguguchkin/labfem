@@ -8,7 +8,7 @@
 import os
 
 import numpy as np  # type: ignore[import-not-found]
-from PIL import Image, ImageFilter, ImageEnhance  # type: ignore[import-not-found]
+from PIL import Image, ImageFilter  # type: ignore[import-not-found]
 
 RAW = '/home/pi/workspace/labfem/v6/work/img-raw'
 SITE = '/home/pi/workspace/labfem/v6/site/assets/img'
@@ -263,43 +263,33 @@ def inset_crop(im, frac):
 def main():
     # --- тайлы текстур ---
     save_webp(velvet_tile(), f'{SITE}/tex/velvet-tile.webp')
-    save_webp(crackle_tile(), f'{SITE}/tex/crackle-tile.webp')
     save_webp(seamless_tile(load('gold-tile'), 256), f'{SITE}/tex/gold-tile.webp')
     save_webp(seamless_tile(load('parchment-tile'), 512), f'{SITE}/tex/parchment-tile.webp')
 
-    # --- картины ---
-    # антракт: i2i-версия без арки, 1280x1600 → 1460x1825 (браузер не растягивает),
-    # чёткость и контраст возвращаем маской резкости (i2i мылит)
-    hero2 = inset_crop(load('hero-canvas-2-noarch'), 0.01).resize((1460, 1825), Image.LANCZOS)
-    hero2 = hero2.filter(ImageFilter.UnsharpMask(radius=2.2, percent=75, threshold=2))
-    hero2 = ImageEnhance.Contrast(hero2).enhance(1.08)
+    # --- картины (v7: medieval/tapestry restyle, т2и-оригиналы из work/img-raw) ---
+    # антракт: t2i, 1280x1600 → 1460x1825, лёгкий unsharp (t2i уже резкий, усиления не надо)
+    hero2 = load('v7-interlude-1').resize((1460, 1825), Image.LANCZOS)
+    hero2 = hero2.filter(ImageFilter.UnsharpMask(radius=2.0, percent=55, threshold=2))
     save_webp(grain_vignette(hero2), f'{SITE}/hero/hero-canvas-2.webp')
-    # полноэкранное полотно: два кропа одного оригинала (desktop 16:9, mobile 9:16)
-    hf = load('hero-full')
-    land = hf.crop((0, 280, 2048, 1432))  # голова с запасом ~120px (без обреза макушки)
+    # полноэкранное полотно: v7-hero-1, зеркалим (лицо в источнике слева, тексту нужен правый край),
+    # два кропа одного оригинала: desktop 16:9 1600x900, mobile 9:16 1152x2048
+    hf = load('v7-hero-1').transpose(Image.FLIP_LEFT_RIGHT)
+    land = hf.crop((0, 40, 1600, 940))  # голова (макушка y~100) с полем 60px, лицо ~70-86% ширины
     save_webp(grain_vignette(land), f'{SITE}/hero/hero-full-land.webp')
-    port = hf.crop((448, 0, 1600, 2048))
+    port = hf.crop((414, 0, 1566, 2048))  # лицо ~75% ширины
     save_webp(grain_vignette(port), f'{SITE}/hero/hero-full-port.webp')
-    hero = load('hero-canvas').resize((1100, 1375), Image.LANCZOS)
-    save_webp(grain_vignette(hero), f'{SITE}/hero/hero-canvas.webp')
-    pairs = [('feminity-figure', 'paint/feminity-figure'),
-             ('feminity-figure-2', 'paint/feminity-figure-2'),
-             ('optics-figure', 'paint/optics-figure'),
-             ('for-whom-figure', 'paint/for-whom-figure'),
-             ('circle-figure', 'paint/circle-figure'),
-             ('circle-figure-2', 'paint/circle-figure-2'),
-             ('circle-figure-3', 'paint/circle-figure-3'),
-             ('invite-figure', 'paint/invite-figure'),
-             ('fruit-ripe', 'paint/fruit-ripe'), ('cat-black', 'cards/cat-black'),
-             ('pomegranate', 'cards/pomegranate'), ('snake-skin', 'cards/snake-skin'),
-             ('thread-spindle', 'cards/thread-spindle'), ('water-dark', 'cards/water-dark')]
+    pairs = [('v7-feminity-1', 'paint/feminity-figure-2'),
+             ('v7-optics-2', 'paint/optics-figure'),
+             ('v7-forwhom-2', 'paint/for-whom-figure'),
+             ('v7-circle-1', 'paint/circle-figure-3'),
+             ('v7-invite-1', 'paint/invite-figure'),
+             ('v7-cat-2', 'cards/cat-black'),
+             ('v7-pomegranate-1', 'cards/pomegranate'),
+             ('v7-snake-2', 'cards/snake-skin'),
+             ('v7b-spindle-2', 'cards/thread-spindle'),
+             ('v7-water-2', 'cards/water-dark')]
     for name, out in pairs:
-        im = load(name)
-        if name == 'optics-figure':
-            im = inset_crop(im, 0.045)
-        if name == 'circle-figure-3':
-            im = inset_crop(im, 0.02)
-        im = im.resize((800, 1000), Image.LANCZOS)
+        im = load(name).resize((800, 1000), Image.LANCZOS)
         save_webp(grain_vignette(im), f'{SITE}/{out}.webp')
 
     # --- орнамент и символы (альфа) ---
@@ -313,8 +303,8 @@ def main():
     portrait('author-polina', 'polina')
     portrait('author-veronika', 'veronika')
 
-    # --- og-cover: кроп hero-canvas-2 1200x630 ---
-    og = crop_cover(load('hero-canvas-2-noarch'))
+    # --- og-cover: кроп v7-interlude-1 1200x630 ---
+    og = crop_cover(load('v7-interlude-1'))
     save_webp(grain_vignette(og.resize((1200, 630), Image.LANCZOS)), f'{SITE}/meta/og-cover.webp')
     print('done')
 

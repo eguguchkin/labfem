@@ -45,10 +45,10 @@
 
 /* ---------- токены (stylebook §1, дословно) ---------- */
 :root{
-  /* бархат: почти чёрный тёмно-зелёный, три глубины (ревизия: ещё на ~10% темнее) */
-  --velvet-deep:#020d07;   /* канвас, самая тьма, виньетки */
-  --velvet:#06190f;        /* основной фон секций */
-  --velvet-soft:#0d2819;   /* подсветка тканей, ховер-подложки */
+  /* бархат: почти чёрный тёмно-зелёный, три глубины (ревизия: ещё на 15% темнее — токены ×0.85) */
+  --velvet-deep:#020b06;   /* канвас, самая тьма, виньетки */
+  --velvet:#05150d;        /* основной фон секций */
+  --velvet-soft:#0b2215;   /* подсветка тканей, ховер-подложки */
   /* золото: свет на кромках */
   --gold:#c8a24a;          /* линии, багет, акценты */
   --gold-bright:#e9cd7f;   /* блик, hover, активные элементы */
@@ -76,12 +76,11 @@ html{
 /* слой 2: бархат под контентом (ловушка v5: фон body не ставить) */
 html::before{
   content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
-  /* затемнение бархата на 20%: первый слой — чёрная вуаль поверх плитки */
-  background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),
+  /* затемнение бархата: 20% ранее + 15% (итог .32) — чёрная вуаль поверх плитки */
+  background:linear-gradient(rgba(0,0,0,.32),rgba(0,0,0,.32)),
     url('../img/tex/velvet-tile.webp') repeat;background-size:1024px 1024px;
 }
-/* слой 4: виньетка «зала» поверх вьюпорта (fixed — без стыков между секциями);
-   кракелюр живёт только на полотнах, см. .arch::before/.frame::before */
+/* слой 4: виньетка «зала» поверх вьюпорта (fixed — без стыков между секциями) */
 html::after{
   content:"";position:fixed;inset:0;z-index:40;pointer-events:none;
   background:radial-gradient(ellipse at 50% 45%,transparent 52%,var(--shadow-deep) 100%);
@@ -164,14 +163,6 @@ a:hover{color:var(--gold-bright);}
   content:"";position:absolute;inset:8px;pointer-events:none;z-index:3;border:1px solid var(--gold);
   box-shadow:inset 0 0 60px var(--shadow-deep);
 }
-/* кракелюр — лак старой картины — только на полотнах; фото авторов — без лака */
-.arch::before,.frame::before{
-  content:"";position:absolute;inset:8px;z-index:2;pointer-events:none;
-  background:url('../img/tex/crackle-tile.webp') repeat;background-size:260px 260px;
-  mix-blend-mode:soft-light;opacity:.75;
-}
-.arch::before{border-radius:calc(50% - 4px) calc(50% - 4px) 0 0 / calc(30% - 4px) calc(30% - 4px) 0 0;}
-.author-canvas::before{content:none;}
 .frame img{width:100%;height:100%;object-fit:cover;}
 
 /* ---------- разделитель секций ---------- */
@@ -202,12 +193,6 @@ a:hover{color:var(--gold-bright);}
 }
 .hero-bg{position:absolute;inset:0;z-index:0;}
 .hero-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 0%;}
-/* кракелюр на полотне hero (как на картинах в рамках) */
-.hero::before{
-  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:url('../img/tex/crackle-tile.webp') repeat;background-size:260px 260px;
-  mix-blend-mode:soft-light;opacity:.75;
-}
 .hero-scrim{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to top,
@@ -234,16 +219,11 @@ a:hover{color:var(--gold-bright);}
 .hero-thread img{width:28px;height:28px;opacity:.85;}
 .thread-line{width:1px;height:56px;background:linear-gradient(var(--gold-dim),transparent);}
 
-/* антракт: полноэкранное полотно без текста; кракелюр + мягкий низ */
+/* антракт: полноэкранное полотно без текста; мягкий низ */
 .interlude{
   position:relative;min-height:92svh;overflow:hidden;
 }
 .interlude-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;}
-.interlude::before{
-  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:url('../img/tex/crackle-tile.webp') repeat;background-size:260px 260px;
-  mix-blend-mode:soft-light;opacity:.75;
-}
 .interlude::after{
   content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
   background:radial-gradient(ellipse 88% 58% at 50% 106%,rgba(2,13,7,.9),rgba(2,13,7,.5) 55%,transparent 78%);
