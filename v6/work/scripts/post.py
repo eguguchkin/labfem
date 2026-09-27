@@ -274,9 +274,9 @@ def main():
     # полноэкранное полотно: v7-hero-1, зеркалим (лицо в источнике слева, тексту нужен правый край),
     # два кропа одного оригинала: desktop 16:9 1600x900, mobile 9:16 1152x2048
     hf = load('v7-hero-1').transpose(Image.FLIP_LEFT_RIGHT)
-    land = hf.crop((0, 40, 1600, 940))  # голова (макушка y~100) с полем 60px, лицо ~70-86% ширины
+    land = hf.crop((208, 0, 2048, 1035))  # голова ровно по центру (50%), макушка ~10%
     save_webp(grain_vignette(land), f'{SITE}/hero/hero-full-land.webp')
-    port = hf.crop((414, 0, 1566, 2048))  # лицо ~75% ширины
+    port = hf.crop((552, 0, 1704, 2048))  # голова по центру (50%), целиком над текстом
     save_webp(grain_vignette(port), f'{SITE}/hero/hero-full-port.webp')
     pairs = [('v7-feminity-1', 'paint/feminity-figure-2'),
              ('v7-optics-2', 'paint/optics-figure'),
