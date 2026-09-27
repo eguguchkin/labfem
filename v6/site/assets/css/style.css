@@ -1,0 +1,365 @@
+/* Лаборатория Феминности — v6, этап 2 (статическая вёрстка)
+   Палитра и состояния — токенами в :root (stylebook §1, дословно). */
+
+/* ---------- шрифты: самохост woff2, cyrillic + latin ---------- */
+@font-face{font-family:'Cormorant';font-style:normal;font-weight:400;font-display:swap;
+  src:url('../fonts/Cormorant-400-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'Cormorant';font-style:normal;font-weight:400;font-display:swap;
+  src:url('../fonts/Cormorant-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Cormorant';font-style:italic;font-weight:400;font-display:swap;
+  src:url('../fonts/Cormorant-400i-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'Cormorant';font-style:italic;font-weight:400;font-display:swap;
+  src:url('../fonts/Cormorant-400i-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Cormorant';font-style:normal;font-weight:500;font-display:swap;
+  src:url('../fonts/Cormorant-500-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'Cormorant';font-style:normal;font-weight:500;font-display:swap;
+  src:url('../fonts/Cormorant-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Cormorant';font-style:italic;font-weight:500;font-display:swap;
+  src:url('../fonts/Cormorant-500i-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'Cormorant';font-style:italic;font-weight:500;font-display:swap;
+  src:url('../fonts/Cormorant-500i-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Cormorant';font-style:normal;font-weight:600;font-display:swap;
+  src:url('../fonts/Cormorant-600-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'Cormorant';font-style:normal;font-weight:600;font-display:swap;
+  src:url('../fonts/Cormorant-600-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Cormorant';font-style:italic;font-weight:600;font-display:swap;
+  src:url('../fonts/Cormorant-600i-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'Cormorant';font-style:italic;font-weight:600;font-display:swap;
+  src:url('../fonts/Cormorant-600i-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'EB Garamond';font-style:normal;font-weight:400;font-display:swap;
+  src:url('../fonts/EBGaramond-400-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'EB Garamond';font-style:normal;font-weight:400;font-display:swap;
+  src:url('../fonts/EBGaramond-400-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'EB Garamond';font-style:italic;font-weight:400;font-display:swap;
+  src:url('../fonts/EBGaramond-400i-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'EB Garamond';font-style:italic;font-weight:400;font-display:swap;
+  src:url('../fonts/EBGaramond-400i-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'EB Garamond';font-style:normal;font-weight:500;font-display:swap;
+  src:url('../fonts/EBGaramond-500-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'EB Garamond';font-style:normal;font-weight:500;font-display:swap;
+  src:url('../fonts/EBGaramond-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'EB Garamond';font-style:italic;font-weight:500;font-display:swap;
+  src:url('../fonts/EBGaramond-500i-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'EB Garamond';font-style:italic;font-weight:500;font-display:swap;
+  src:url('../fonts/EBGaramond-500i-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+
+/* ---------- токены (stylebook §1, дословно) ---------- */
+:root{
+  /* бархат: почти чёрный тёмно-зелёный, три глубины (ревизия: ещё на ~10% темнее) */
+  --velvet-deep:#020d07;   /* канвас, самая тьма, виньетки */
+  --velvet:#06190f;        /* основной фон секций */
+  --velvet-soft:#0d2819;   /* подсветка тканей, ховер-подложки */
+  /* золото: свет на кромках */
+  --gold:#c8a24a;          /* линии, багет, акценты */
+  --gold-bright:#e9cd7f;   /* блик, hover, активные элементы */
+  --gold-dim:#7d6429;      /* приглушённое золото, номера секций */
+  /* поддерживающие пигменты */
+  --patina:#6f9c8a;        /* зелень патины; доля площади < 5% */
+  --flesh:#e3c3a3;         /* тёплая охра кожи/плодов; точечно */
+  --madder:#7e2b26;        /* глубокая марена; одна-две точки на сайт */
+  /* текст */
+  --ivory:#ece3cf;         /* основной текст на бархате */
+  --ivory-dim:#b6ab93;     /* вторичный текст, подписи */
+
+  /* служебные (производные, только для теней/прозрачностей) */
+  --gold-glow:rgba(200,162,74,.18);
+  --shadow-deep:rgba(2,13,7,.66);  /* виньетка «зала» поверх вьюпорта */
+  --btn-veil:rgba(2,13,7,.78);     /* подложка кнопки поверх полотна */
+}
+
+/* ---------- база ---------- */
+*,*::before,*::after{box-sizing:border-box;}
+html{
+  background:var(--velvet-deep);
+  scroll-behavior:smooth;
+}
+/* слой 2: бархат под контентом (ловушка v5: фон body не ставить) */
+html::before{
+  content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:url('../img/tex/velvet-tile.webp') repeat;background-size:1024px 1024px;
+}
+/* слой 4: виньетка «зала» поверх вьюпорта (fixed — без стыков между секциями);
+   кракелюр живёт только на полотнах, см. .arch::before/.frame::before */
+html::after{
+  content:"";position:fixed;inset:0;z-index:40;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 52%,var(--shadow-deep) 100%);
+}
+body{
+  margin:0;
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:22px;line-height:1.7;color:var(--ivory-dim);
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%;height:auto;}
+h1,h2,h3{font-family:'Cormorant',Georgia,serif;color:var(--ivory);font-weight:500;margin:0;}
+h1{font-size:clamp(46px,7vw,104px);line-height:1.05;letter-spacing:.01em;}
+h2{font-size:clamp(38px,4.2vw,62px);line-height:1.12;letter-spacing:.01em;margin:0 0 .6em;}
+h1 em,h2 em{font-style:italic;font-weight:500;}
+p{margin:0 0 1em;}
+a{color:var(--gold);text-decoration:none;}
+a:hover{color:var(--gold-bright);}
+:focus-visible{outline:1px solid var(--gold-bright);outline-offset:4px;}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+
+.container{width:min(1160px,92vw);margin-inline:auto;}
+
+/* ---------- навигация-«оглавление» ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:70;
+  display:flex;justify-content:center;gap:clamp(14px,2.4vw,34px);
+  padding:16px 20px;
+  background:linear-gradient(var(--velvet-deep) 55%,transparent);
+  opacity:0;transform:translateY(-8px);pointer-events:none;
+  transition:opacity .5s ease,transform .5s ease;
+}
+.nav.on{opacity:1;transform:none;pointer-events:auto;}
+.nav a{
+  font-family:'Cormorant',Georgia,serif;font-weight:600;text-transform:uppercase;
+  font-size:13px;letter-spacing:.28em;color:var(--ivory-dim);
+  padding:6px 2px;border-bottom:1px solid transparent;
+  transition:color .3s,border-color .3s;
+}
+.nav a:hover{color:var(--gold-bright);border-color:var(--gold-dim);}
+.nav a.active{color:var(--gold);border-color:var(--gold-dim);}
+@media (max-width:1023px){
+  .nav{display:none;}
+}
+[id]{scroll-margin-top:24px;}
+
+/* ---------- лейблы и номера секций (stylebook §2) ---------- */
+.label{
+  font-family:'Cormorant',Georgia,serif;font-weight:600;text-transform:uppercase;
+  font-size:16px;letter-spacing:.35em;color:var(--gold);margin:0 0 1.4em;
+}
+.label .num{font-style:italic;font-weight:500;color:var(--gold-dim);letter-spacing:.15em;}
+.section-sub{font-style:italic;color:var(--ivory-dim);font-size:23px;margin:-.4em 0 3em;}
+.caption-line{
+  font-family:'Cormorant',Georgia,serif;font-style:italic;font-size:30px;
+  color:var(--ivory);text-align:center;margin:3em 0 0;
+}
+.quiet-line{font-style:italic;color:var(--ivory-dim);font-size:21px;margin-top:2em;}
+
+/* ---------- арки и багеты (stylebook §4) ---------- */
+.arch{
+  border-radius:50% 50% 0 0 / 30% 30% 0 0;
+  border:1px solid var(--gold-dim);
+  padding:8px;                 /* тёмный зазор между линиями */
+  background:var(--velvet-deep);
+  position:relative;
+}
+.arch > *{border-radius:calc(50% - 4px) calc(50% - 4px) 0 0 / calc(30% - 4px) calc(30% - 4px) 0 0;overflow:hidden;}
+.arch::after{
+  content:"";position:absolute;inset:8px;pointer-events:none;z-index:3;
+  border:1px solid var(--gold);
+  border-radius:calc(50% - 4px) calc(50% - 4px) 0 0 / calc(30% - 4px) calc(30% - 4px) 0 0;
+}
+.frame{
+  margin:0;border:1px solid var(--gold-dim);padding:8px;background:var(--velvet-deep);
+  position:relative;
+}
+.frame::after{
+  content:"";position:absolute;inset:8px;pointer-events:none;z-index:3;border:1px solid var(--gold);
+  box-shadow:inset 0 0 60px var(--shadow-deep);
+}
+/* кракелюр — лак старой картины — только на полотнах; фото авторов — без лака */
+.arch::before,.frame::before{
+  content:"";position:absolute;inset:8px;z-index:2;pointer-events:none;
+  background:url('../img/tex/crackle-tile.webp') repeat;background-size:260px 260px;
+  mix-blend-mode:soft-light;opacity:.75;
+}
+.arch::before{border-radius:calc(50% - 4px) calc(50% - 4px) 0 0 / calc(30% - 4px) calc(30% - 4px) 0 0;}
+.author-canvas::before{content:none;}
+.frame img{width:100%;height:100%;object-fit:cover;}
+
+/* ---------- разделитель секций ---------- */
+.divider{
+  position:relative;height:1px;margin:12svh auto 0;width:min(720px,70vw);
+  background:linear-gradient(90deg,transparent,var(--gold-dim) 20%,var(--gold-dim) 80%,transparent);
+}
+.divider img{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:32px;height:32px;opacity:.9;
+}
+
+/* ---------- кнопка-табличка (stylebook §5) ---------- */
+.btn{
+  display:inline-block;font-family:'Cormorant',Georgia,serif;font-weight:600;
+  text-transform:uppercase;letter-spacing:.25em;font-size:16px;color:var(--gold-bright);
+  border:1px solid var(--gold);border-radius:4px;padding:16px 32px;background:transparent;
+  cursor:pointer;transition:background-color .3s,box-shadow .3s,color .3s;
+}
+.btn:hover{background:var(--velvet-soft);box-shadow:0 0 24px var(--gold-glow);color:var(--gold-bright);}
+.btn:active{box-shadow:none;filter:brightness(1.1);}
+
+/* ---------- hero (01) ---------- */
+.hero{
+  min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  position:relative;padding:8svh 0 6svh;
+}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;}
+.hero-sub{font-style:italic;font-size:24px;color:var(--ivory);margin:1.6em 0 1.2em;}
+.hero-essence{font-size:21px;color:var(--ivory-dim);margin-bottom:2.4em;}
+.hero-canvas{margin:0;max-width:560px;justify-self:end;width:100%;}
+.hero-canvas img{width:100%;height:auto;}
+.hero-thread{
+  position:absolute;left:50%;bottom:2svh;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.hero-thread img{width:28px;height:28px;opacity:.85;}
+.thread-line{width:1px;height:56px;background:linear-gradient(var(--gold-dim),transparent);}
+
+/* ---------- панели-секции ---------- */
+.panel{position:relative;padding:14svh 0 0;}
+#invite{padding-bottom:14svh;}
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;}
+.pair-canvas{margin:0;max-width:540px;width:100%;}
+.pair-canvas img{aspect-ratio:4/5;}
+.mirror .pair-grid > figure{order:-1;}
+.pair-text .label{margin-bottom:1.2em;}
+
+/* 03 оптика */
+.optics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:48px;margin:4em 0 2em;}
+.medallion{text-align:center;}
+.medallion-ring{
+  width:170px;height:170px;margin:0 auto 1.4em;border-radius:50%;
+  border:1px solid var(--gold);box-shadow:0 0 40px var(--gold-glow);
+  display:flex;align-items:center;justify-content:center;background:var(--velvet);
+}
+.medallion-ring img{width:110px;height:110px;}
+.medallion h3{font-size:27px;margin-bottom:.3em;}
+.medallion p{font-size:20px;font-style:italic;margin:0;}
+.section-canvas{max-width:460px;margin:4em auto 0;}
+.section-canvas img{aspect-ratio:4/5;}
+
+/* 04 для кого */
+.invite-lines{list-style:none;margin:2.4em 0;padding:0;}
+.invite-lines li{
+  font-family:'Cormorant',Georgia,serif;font-size:28px;color:var(--ivory);
+  line-height:1.5;margin-bottom:1.1em;padding-left:2.2em;position:relative;
+}
+.invite-lines li::before{
+  content:"";position:absolute;left:0;top:.55em;width:14px;height:14px;
+  background:url('../img/orn/fleuron.webp') center/contain no-repeat;opacity:.85;
+}
+
+/* 05 авторы */
+.authors-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:3.5em;}
+.author{margin:0;text-align:center;}
+.author-canvas{margin:0 auto 1.8em;max-width:380px;aspect-ratio:2/3;}
+.author-canvas img{width:100%;height:100%;object-fit:cover;}
+.author h3{font-size:30px;margin-bottom:.4em;}
+.author figcaption p{font-size:20px;line-height:1.7;text-align:left;}
+
+/* 06 карточки */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:56px;margin-top:3.5em;}
+.card{display:flex;flex-direction:column;}
+.card-canvas{margin:0 0 1.6em;position:relative;}
+.card-canvas img{aspect-ratio:4/5;width:100%;transition:filter .4s;}
+.card:hover .card-canvas img{filter:brightness(1.04);}
+.card:hover .card-canvas{border-color:var(--gold);}
+/* кнопка-табличка на карточке: невидима до наведения, поверх низа полотна */
+.card-canvas .btn{
+  position:absolute;left:50%;bottom:20px;z-index:4;white-space:nowrap;
+  transform:translate(-50%,10px);opacity:0;pointer-events:none;
+  background:var(--btn-veil);backdrop-filter:blur(2px);
+  transition:opacity .35s ease,transform .35s ease,background-color .3s,color .3s;
+}
+.card:hover .card-canvas .btn,
+.card:focus-within .card-canvas .btn{opacity:1;transform:translate(-50%,0);pointer-events:auto;}
+@media (hover:none){
+  .card-canvas .btn{opacity:1;transform:translate(-50%,0);pointer-events:auto;}
+}
+.card h3{font-size:32px;line-height:1.2;margin-bottom:.4em;}
+.card-essence{font-style:italic;font-size:21px;}
+.card-meta{
+  font-family:'Cormorant',Georgia,serif;font-weight:600;text-transform:uppercase;
+  font-size:15px;letter-spacing:.3em;color:var(--gold-dim);margin:auto 0 .4em;
+}
+.card-status{font-size:18px;color:var(--ivory-dim);margin:0 0 1.2em;}
+.card-status.closed{color:var(--gold-dim);font-style:italic;letter-spacing:.02em;}
+.card-status.open{color:var(--gold);}
+.card.flagship{grid-column:span 1;}
+.card .btn{align-self:flex-start;}
+
+/* 07 шаги */
+.steps{list-style:none;counter-reset:step;margin:2.4em 0;padding:0;}
+.steps li{
+  counter-increment:step;position:relative;padding-left:3.2em;margin-bottom:1.6em;
+  font-size:22px;
+}
+.steps li::before{
+  content:counter(step,decimal-leading-zero);
+  position:absolute;left:0;top:.1em;font-family:'Cormorant',Georgia,serif;
+  font-style:italic;font-size:24px;color:var(--gold-dim);
+}
+.steps strong{color:var(--ivory);font-weight:500;}
+
+/* 08 форма */
+.subscribe{display:flex;gap:16px;align-items:stretch;margin:2.4em 0 1em;flex-wrap:wrap;}
+.subscribe input{
+  flex:1 1 260px;min-width:0;border:1px solid var(--gold-dim);border-radius:4px;
+  padding:14px 18px;font-family:'EB Garamond',Georgia,serif;font-size:17px;
+  color:var(--velvet-deep);background:url('../img/tex/parchment-tile.webp') center/512px repeat;
+  opacity:.92;
+}
+.subscribe input::placeholder{color:var(--velvet);opacity:.65;font-style:italic;}
+.subscribe input:focus-visible{outline:1px solid var(--gold);outline-offset:2px;opacity:1;}
+.form-note{font-size:17px;font-style:italic;color:var(--ivory-dim);}
+
+/* ---------- футер ---------- */
+.footer{padding:10svh 0 6svh;}
+.footer-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim) 30%,var(--gold-dim) 70%,transparent);margin-bottom:3em;}
+.footer-mark{
+  font-family:'Cormorant',Georgia,serif;font-weight:600;text-transform:uppercase;
+  font-size:15px;letter-spacing:.35em;color:var(--gold-dim);text-align:center;margin:0 0 .8em;
+}
+.footer-links{text-align:center;font-size:18px;margin:0;}
+.footer-links a{color:var(--ivory-dim);}
+.footer-links a:hover{color:var(--gold-bright);}
+
+/* ---------- планшет 641–1023 ---------- */
+@media (max-width:1023px){
+  .hero-grid{grid-template-columns:1fr;gap:48px;text-align:center;}
+  .hero-canvas{justify-self:center;max-width:420px;}
+  .pair-grid{grid-template-columns:1fr;gap:48px;}
+  .mirror .pair-grid > figure{order:0;}
+  .pair-canvas{justify-self:center;}
+  .optics-grid{grid-template-columns:repeat(2,1fr);gap:48px 32px;}
+  .cards-grid{grid-template-columns:repeat(2,1fr);gap:40px;}
+  .authors-grid{gap:40px;}
+}
+
+/* ---------- мобильный ≤640 ---------- */
+@media (max-width:640px){
+  body{font-size:20px;}
+  .panel{padding:16svh 0 0;}
+  h1{font-size:clamp(46px,11.5vw,64px);}
+  h2{font-size:clamp(32px,8.4vw,46px);}
+  .hero{padding:10svh 0 8svh;}
+  .hero-sub{font-size:18px;}
+  .optics-grid{grid-template-columns:repeat(2,1fr);gap:44px 20px;}
+  .medallion-ring{width:124px;height:124px;}
+  .medallion-ring img{width:80px;height:80px;}
+  .medallion h3{font-size:21px;}
+  .medallion p{font-size:17px;}
+  .invite-lines li{font-size:22px;}
+  .section-sub{font-size:20px;}
+  .authors-grid{grid-template-columns:1fr;gap:56px;}
+  .author-canvas{max-width:320px;}
+  .cards-grid{grid-template-columns:1fr;gap:60px;}
+  .card-canvas{max-width:440px;margin-inline:auto;}
+  .subscribe{flex-direction:column;}
+  .subscribe input{flex:0 0 auto;}
+  .subscribe .btn{align-self:stretch;}
+  .caption-line{font-size:24px;}
+  .divider{margin-top:14svh;}
+  .author figcaption p{font-size:18px;}
+  .card-essence{font-size:19px;}
+}
+
+/* ---------- reduced motion (stylebook §7) ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{transition:none !important;animation:none !important;}
+}

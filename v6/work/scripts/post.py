@@ -103,8 +103,9 @@ def velvet_tile(n=1024):
     lum = base * 0.22 + mid * 0.30 + nap * 0.55
     lum = (lum - lum.min()) / (lum.max() - lum.min() + 1e-9)
     lum = lum ** 1.3
-    dark = np.array([5, 17, 11], np.float32)
-    light = np.array([23, 56, 38], np.float32)
+    # ревизия: фон темнее на ~10% (правко пользователя)
+    dark = np.array([4.5, 15.3, 9.9], np.float32)
+    light = np.array([20.7, 50.4, 34.2], np.float32)
     rgb = dark[None, None, :] + (light - dark)[None, None, :] * lum[:, :, None]
     sp = rng.random((n, n))
     mask = (sp > 0.999).astype(np.float32)
@@ -114,11 +115,58 @@ def velvet_tile(n=1024):
     return Image.fromarray(np.clip(rgb, 0, 255).astype(np.uint8))
 
 
+def zhang_suen(m):
+    """Тонкая скелетизация 8-связной маски (Zhang-Suen), периодические границы.
+    Гарантирует непрерывность линий: тонкие/бледные сегменты не рвутся порогом."""
+    m = m.astype(np.uint8).copy()
+    while True:
+        changed = False
+        for step in (1, 2):
+            P = m
+            p2 = np.roll(P, -1, 0)
+            p3 = np.roll(p2, -1, 1)
+            p4 = np.roll(P, -1, 1)
+            p5 = np.roll(p4, 1, 0)
+            p6 = np.roll(p5, 1, 1)
+            p7 = np.roll(P, 1, 1)
+            p8 = np.roll(p7, 1, 0)
+            p9 = np.roll(P, 1, 0)
+            B = p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9
+            A = (((p2 == 0) & (p3 == 1)).astype(int) + ((p3 == 0) & (p4 == 1)).astype(int)
+                 + ((p4 == 0) & (p5 == 1)).astype(int) + ((p5 == 0) & (p6 == 1)).astype(int)
+                 + ((p6 == 0) & (p7 == 1)).astype(int) + ((p7 == 0) & (p8 == 1)).astype(int)
+                 + ((p8 == 0) & (p9 == 1)).astype(int) + ((p9 == 0) & (p2 == 1)).astype(int))
+            c1 = (B >= 2) & (B <= 6) & (A == 1) & (P == 1)
+            c2 = ((p2 * p4 * p6 == 0) & (p4 * p6 * p8 == 0)) if step == 1 \
+                else ((p2 * p4 * p8 == 0) & (p2 * p6 * p8 == 0))
+            rm = c1 & c2
+            m[rm] = 0
+            changed = changed or rm.any()
+        if not changed:
+            break
+    return m
+
+
 def crackle_tile():
-    """Кракелюр из crackle2: highpass трещин + зеркальная сшивка 640."""
+    """Кракелюр формы crackle2 (принята пользователем), сетка в ~5 раз крупнее,
+    линии тонкие и непрерывные: скелет гребня (1px) с модуляцией яркостью
+    оригинала. Бесшовность: апскейл x5 сохраняет период, зеркальная сшивка окна."""
     c = np.asarray(sq(load('crackle2')).convert('L'))
-    hp = np.clip(128 + (highpass(c, 24) - 128) * 1.9, 0, 255)
-    return mirror_tile(np.stack([hp] * 3, axis=2).astype(np.uint8), 640)
+    hp = np.clip(128 + (highpass(c, 24) - 128) * 3.6, 0, 255)
+    t640 = mirror_tile(np.stack([hp] * 3, axis=2).astype(np.uint8), 640)
+    u = t640.resize((3200, 3200), Image.LANCZOS).convert('L')
+    win = u.crop((1280, 1280, 1920, 1920))
+    tile = mirror_tile(np.stack([np.asarray(win)] * 3, axis=2), 640).convert('L')
+    g = np.asarray(tile).astype(np.float32)
+    d = np.clip(g - 128, 0, 255)               # трещины в источнике СВЕТЛЫЕ
+    sk = zhang_suen(d > 25)
+    p995 = np.percentile(d, 99.5)
+    inten = np.clip(d / (p995 + 1e-6) * 2.2, 0.28, 1.0)
+    lines = np.clip(sk.astype(np.float32) * inten, 0, 1)
+    lines = np.asarray(Image.fromarray((lines * 255).astype(np.uint8))
+                       .filter(ImageFilter.GaussianBlur(0.6))).astype(np.float32) / 255.0
+    out = np.clip(128 + lines * 110, 0, 255)
+    return Image.fromarray(np.stack([out] * 3, axis=2).astype(np.uint8))
 
 
 def grain_vignette(im, sigma=1.2, amp=3.0, vig=0.06):
@@ -183,13 +231,22 @@ def crop_cover(im):
 
 
 def portrait(src, out):
+    """Портрет автора: тёплый дуотон в свете свечи, фигура выступает из темноты."""
     try:
         im = Image.open(f'/home/pi/workspace/labfem/v6/spec/{src}.png').convert('RGB')
     except OSError as exc:
         raise SystemExit(f'не удалось открыть портрет {src}: {exc}') from None
     im = crop_ratio(im, 2, 3)
     im = im.resize((700, 1050), Image.LANCZOS)
-    im = duotone(im)
+    im = duotone(im, shadow=(28, 18, 9), light=(241, 221, 178))
+    a = np.asarray(im).astype(np.float32)
+    h, w = a.shape[:2]
+    y, x = np.mgrid[0:h, 0:w]
+    r = np.sqrt(((x - w / 2) / (w * 0.60)) ** 2 + ((y - h * 0.44) / (h * 0.60)) ** 2)
+    m = np.clip(1.18 - r, 0, 1) ** 1.5          # 1 в центре, 0 к краям
+    factor = (0.16 + 0.84 * m)[:, :, None]      # края тонут в темноте
+    a = np.clip(a * factor, 0, 255)
+    im = Image.fromarray(a.astype(np.uint8))
     save_webp(grain_vignette(im, vig=0.10), f'{SITE}/authors/{out}.webp')
 
 

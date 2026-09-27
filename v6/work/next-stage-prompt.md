@@ -1,76 +1,84 @@
-# Задание на этап 2 — вёрстка статического сайта (desktop + mobile)
+# Задание на этап 3 — проверка вёрстки + предложения визуальных эффектов
 
-Контекст: этап 1 завершён. Готовы: work/brandbook.md (дух, ценности, ToV),
-work/stylebook.md (токены, типографика, фактуры, компоненты, сетка),
-work/structure-texts.md (финальные тексты 8 секций), work/prompts.md (промпты),
-все изображения в site/assets/img/{tex,hero,paint,cards,orn,authors,meta}.
-Набор полотен (основные): hero-canvas-2 (01), feminity-figure-2 (02), optics-figure (03),
-for-whom-figure (04), circle-figure-3 (07), invite-figure (08);
-карточки 06: cat-black, pomegranate, snake-skin, thread-spindle, water-dark.
-Запасные/архив (НЕ верстать): hero-canvas, feminity-figure, circle-figure, circle-figure-2,
-fruit-ripe; warm-stone удалён.
-Работаем ТОЛЬКО в /home/pi/workspace/labfem/v6 (spec/ не трогаем, другие v<N> не читаем).
+Контекст: этап 2 завершён. Сверстано: site/index.html (8 секций, якоря #lab…#invite),
+site/assets/css/style.css (токены :root из stylebook §1 дословно, слои фона на html,
+арки/багеты/компоненты, брейкпоинты 1024/640), site/assets/js/main.js (пустой, план этапа 4
+в комментарии), site/assets/fonts/ (20 woff2: Cormorant 400/500/600 + italic, EB Garamond
+400/500 + italic, cyrillic+latin), favicon 32px из fleuron.
+Скриншоты этапа 2: work/shots2/{d,m}-{lab,feminity,optics,for-whom,about,meetings,format,invite}.jpg
+(desktop 1440x900, mobile 390x844). Скрипт съёмки: /tmp/lab6/shoot2.js (НЕ персистентен —
+воссоздать по memory pibox-headless-screenshots: playwright-core /home/pi/opt/pw/node_modules,
+executablePath chromium_headless_shell-1243, LD_LIBRARY_PATH=/home/pi/chrome-sysroot/usr/lib/aarch64-linux-gnu,
+прокрутка→img.loading='eager'→waitForFunction complete, гасить анимации addStyleTag,
+скролл к якорям behavior:'instant'). Сервер: python3 -m http.server 8080 --bind 0.0.0.0 из site/.
+Работаем ТОЛЬКО в /home/pi/workspace/labfem/v6.
 
-## Что сделать
+## Проверки (замеры пикселями и DOM, зрение напрямую для художественных оценок;
+## миниатюры ≤760px шириной, чтобы не переполнять контекст)
 
-1. **Шрифты.** Самохост woff2: Cormorant (400,500,600 + italic) и EB Garamond (400,500 + italic),
-   подмножества cyrillic + latin, в site/assets/fonts/ + @font-face в style.css
-   (font-display: swap). Скачать с Google Fonts (woff2 через UA-заголовок Chrome) или
-   fonts.gstatic.com. Если сеть недоступна — fallback-стек 'Cormorant Garamond', Georgia, serif
-   и пометить TODO в style.css.
+1. **Бесшовность текстур.** Бархат html::before (background-size 1024px):
+   - снять вьюпорт-кадр большой однородной области (низ hero / простенок секции 06);
+   - пиксельный тест периодичности: для строки y сравнить столбцы x и x+1024 —
+     средняя |разность| по каналу < 2;
+   - визуально: кроп 512x512 через границу тайла — шва/«стёжки»/калейдоскопа не видно.
+   Кракелюр теперь живёт ТОЛЬКО на полотнах (.arch::before/.frame::before, 260px, soft-light,
+   opacity .75; тайл — скелетизированная сетка, ячейки ~5x крупнее прежних, линии тонкие):
+   проверить бесшовность тем же тестом с шагом 260 на кропе полотна и что трещины не вылезают
+   за внутренний багет (inset 8px). На бархате трещин быть НЕ должно; на фото авторов — тоже
+   (.author-canvas::before{content:none}).
+2. **Цвета по токенам.** Замерить пикселями на скриншотах: фон панели (ожидание ≈ --velvet
+   #06190f, кракелюр на фон больше не влияет: допуск ±4 по каналу), тьма виньетки у краёв
+   вьюпорта ≈ --shadow-deep rgba(2,13,7,.66) поверх --velvet-deep (fixed-виньетка html::after,
+   БЕЗ стыков между секциями — проверить кадр перехода 03→04: градиент непрерывный),
+   текст заголовка ≈ --ivory #ece3cf, тело ≈ --ivory-dim #b6ab93, линия багета ≈ --gold #c8a24a,
+   номер секции ≈ --gold-dim #7d6429, поле формы — пергамент светлый. Любое значение вне
+   палитры (grep css уже чист: только var(--*) и токены в :root) — баг.
+   Кракелюр должен быть ЗАМЕТЕН глазом на кропе полотна 1:1 (и на светлом дуотоне, и в
+   освещённых зонах тёмных полотен; в глубоких тенях гаснет — это норма soft-light).
+3. **Шрифты.** В браузере: document.fonts.check('16px Cormorant'), ('italic 16px Cormorant'),
+   ('16px "EB Garamond"') → true после загрузки; ни одного запроса к fonts.googleapis.com
+   в network; визуально: H1 и заголовки — Cormorant с italic-словом, тело — EB Garamond,
+   лейблы — капс с разрежением. Fallback Georgia не должен нигде проявиться.
+4. **Геометрия.** Замеры boundingClientRect: hero-grid 2 колонки (desktop) / 1 (mobile);
+   optics-grid 4 (desktop) / 2×2 (mobile); cards-grid 3 (desktop) / 2 (планшет) / 1 (mobile);
+   авторы 2 / 1; арки: border-radius верх скруглён, двойная линия багета видна (кроп 256px);
+   разделители центрированы; ничего не обрезано (нет overflow:hidden-жертв), нет наложений.
+5. **Читаемость.** Контраст тело/фон и лейбл/фон по замеренным цветам: тело ≥ 4.5:1,
+   крупные заголовки ≥ 3:1 (посчитать по формуле WCAG из замеренных RGB).
+6. **Мобильное.** scrollWidth == innerWidth на 390 и 360; тап-цели (кнопка, поле, ссылки футера)
+   ≥ 40px по высоте; форма в колонку, поле нормальной высоты (баг этапа 2 исправлен:
+   .subscribe input{flex:0 0 auto} в мобильном блоке).
+7. **Навигация.** desktop: после скролла ниже 60% hero появляется .nav.on (8 пунктов),
+   активный пункт подсвечен (--gold) по секции под кромкой; клик по пункту доводит до якоря
+   без наложений (scroll-margin-top). mobile ≤1023: nav скрыт — проверить, что не оставляет
+   пустой полосы и не ловит клики.
+8. **Карточки встреч.** Порядок: кошка, гранат, нить, тёмная вода, змея (последняя).
+   Три типа статуса: «набор открыт» (gold), «в подготовке» (ivory-dim),
+   «завершено · полотно снято с экспозиции» (gold-dim italic). Кнопка «занять место» есть
+   только у флагмана: БЕЗ наведения невидима (opacity 0), при hover/.card:focus-within —
+   табличка поверх низа полотна; на touch (hover:none) видна всегда. Проверить скриншотом
+   с page.hover и без.
+9. **Мета.** og:title/description/image, theme-color #020d07, favicon 32 — присутствуют и отдают 200.
 
-2. **site/index.html** — одна страница, 8 секций по work/structure-texts.md, якоря
-   #lab #feminity #optics #for-whom #about #meetings #format #invite.
-   Семантика: header (hero) + section*7 + footer. Все тексты — дословно из structure-texts.md.
-   Ссылки: карточка «кошка» → https://cats.jungway.ru/ (target _blank rel noopener),
-   telegram-заглушка → #. Форма подписки: action="#" method="post" (JS этапа 4 перехватит).
-   meta: charset, viewport, description, og:title/og:description/og:image=assets/img/meta/og-cover.webp,
-   theme-color #04150d, favicon (сгенерить 32x32 из fleuron: PIL, alpha).
-   Изображения: width/height атрибуты, alt по смыслу полотна, loading=lazy кроме hero.
-   Иллюстрация в каждой секции по structure-texts.md (01 hero-canvas-2; 02 feminity-figure-2;
-   03 optics-figure; 04 for-whom-figure; 06 пять карточек; 07 circle-figure-3; 08 invite-figure;
-   05 — портреты авторов). Плоды и предметы на полотнах — детали сцены, не натюрморты.
+## Исправления
+Найденное чинить сразу в site/assets/css/style.css (или index.html), переснимать затронутые
+кадры в work/shots2/ (перезаписать), вести список «найдено → исправлено».
 
-3. **site/assets/css/style.css** — вся палитра и состояния токенами в :root (копировать
-   блок токенов из stylebook.md §1 дословно). Реализовать:
-   - слои фона: html{background:var(--velvet-deep)}; html::before — velvet-tile repeat
-     background-size 1024px; html::after — crackle-tile repeat 640px, mix-blend soft-light,
-     opacity .14, pointer-events none, z-index выше контента (учесть ловушку v5: фон body
-     не ставить, текстурные слои только на html).
-   - типографика по stylebook §2; лейблы/номера секций по §2.
-   - арки и багеты по §4 (двойная линия: outer 1px --gold-dim, inner 1px --gold, зазор 6-8px;
-     арка border-radius 50% 50% 0 0 / 30% 30% 0 0).
-   - компоненты по §5: кнопка-табличка, карточка программы (арка 4:5), портрет автора
-     (арка 2:3), цитата-панель, форма (поле на parchment-tile, текст --velvet-deep).
-   - сетка по §6: контейнер 1160px; hero min-height 100svh; секции-простенки 60-70svh;
-     парность текст/полотно с зеркалом; разделители — волосяная линия + fleuron.
-   - состояния по §7 (hover/focus-visible/reduced-motion).
-   - брейкпоинты: ≥1024 desktop; 641-1023 планшет (колонки 2 для оптик и карточек);
-     ≤640 mobile: всё в колонку, H1 40-56px, карточки 100% ширины, медальоны 2×2.
-
-4. **site/assets/js/main.js** — на этапе 2 МИНИМАЛЬНЫЙ: плавный скролл по якорям
-   (scroll-behavior: smooth в css достаточно; js оставить пустым с комментарием-планом
-   этапа 4). Никаких эффектов.
-
-5. **Сборка/проверка локально:** открыть через python http.server 0.0.0.0:8080 из site/;
-   скриншоты desktop 1440x900 и mobile 390x844: playwright-core + chrome-headless-shell
-   (см. memory pibox-headless-screenshots: LD_LIBRARY_PATH=chrome-sysroot, гасить CSS-анимации;
-   скрипт /tmp/shots/shoot.js из v5 можно воссоздать: сначала прокрутить всю страницу,
-   затем img.loading='eager' + waitForFunction complete; fullPage >16384px не снимать —
-   только вьюпорт-снимки по секциям). Скриншоты сохранять в /tmp/lab6/shots2/.
-
-6. **Самопроверка перед сдачей:** все 8 секций присутствуют; тексты совпадают с
-   structure-texts.md дословно; ни одного цвета вне палитры (grep по css: только var(--*)
-   и токены в :root); все img существуют (битых ссылок нет); мобильная вёрстка без
-   горизонтального скролла (document.scrollingElement.scrollWidth == innerWidth).
+## Предложения визуальных эффектов для этапа 4 (вписать в отчёт и в next-stage-prompt)
+База из плана main.js: reveal-on-scroll (IntersectionObserver, каскад для медальонов/карточек),
+параллакс полотен (.pair-canvas/.hero-canvas, translateY 0.06–0.1 от scrollY), «дыхание света»
+медальонов (пульс box-shadow 8s), ken-burns hero (scale 1→1.04, 24s alternate), сообщение формы
+«письмо дойдёт… спасибо». Дополнить своими 2–4 идеями в том же духе «старой картины»
+(напр.: мерцание свечи в hero-полотне мягкой пульсацией brightness 1.00→1.02; золотая нить-
+прогресс скролла волосяной линией справа; лёгкий поворот fleuron-разделителя при входе в
+вьюпорт; hover-«проявление» подписи карточки). Каждое: суть, css/js-механика, риск для
+производительности/стиля, обязательный guard prefers-reduced-motion. Выбрать топ-5 к реализации.
 
 ## Критерий готовности
-Страница открывается, выглядит как «тёмный зал с восемью полотнами»: бархатный фон без
-швов, золото только линиями/багетом, арки у hero/портретов/карточек, кракелюр поверх
-всего едва заметен. Скриншоты desktop+mobile приложены к отчёту (по 4-5 вьюпорт-кадров:
-hero, оптика, о нас, встречи, приглашение).
+Все проверки зелёные (или отклонения обоснованы и зафиксированы), список эффектов этапа 4
+согласован в отчёте. Скриншоты до/после правок приложены.
 
 ## Отчёт
-Коротко: что сделано, список файлов, известные компромиссы, путь к скриншотам.
-Далее — сформулировать задание этапа 3 (проверка текстур/цветов/шрифтов + предложения
-визуальных эффектов) в work/next-stage-prompt.md, перезаписав этот файл.
+Коротко: таблица проверок (проверка → метод → результат), найденные/исправленные баги,
+топ-5 эффектов с механикой. Затем перезаписать work/next-stage-prompt.md заданием этапа 4
+(реализация выбранных эффектов в main.js + css, с reduced-motion guards).
